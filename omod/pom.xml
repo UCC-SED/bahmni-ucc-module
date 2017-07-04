@@ -77,6 +77,11 @@
 			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.bahmni.module</groupId>
+			<artifactId>bahmnicore-api</artifactId>
+			<version>0.89-SNAPSHOT</version>
+		</dependency>
 
 		<!-- End OpenMRS core -->
 
