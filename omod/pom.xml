@@ -18,6 +18,7 @@
 		<MODULE_NAME>${project.name}</MODULE_NAME>
 		<MODULE_VERSION>${project.version}</MODULE_VERSION>
 		<MODULE_PACKAGE>${project.groupId}.${MODULE_ID}</MODULE_PACKAGE>
+		<bahmniVersion>0.89-SNAPSHOT</bahmniVersion>
 	</properties>
 
 	<dependencies>
@@ -80,7 +81,9 @@
 		<dependency>
 			<groupId>org.bahmni.module</groupId>
 			<artifactId>bahmnicore-api</artifactId>
-			<version>0.89-SNAPSHOT</version>
+			<version>${bahmniVersion}</version>
+			<scope>provided</scope>
+			<type>jar</type>
 		</dependency>
 
 		<!-- End OpenMRS core -->
