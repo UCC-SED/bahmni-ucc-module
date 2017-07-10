@@ -16,12 +16,16 @@ import static org.bahmni.module.bahmniucc.UCCModuleConstants.PROGRAM_ATTRIBUTE_I
 
 @Component
 public class UCCProgramServiceValidator implements BahmniProgramServiceValidator {
-    private final BahmniProgramWorkflowService bahmniProgramWorkflowService;
+    @Autowired
+    private BahmniProgramWorkflowService bahmniProgramWorkflowService;
 
     @Autowired
     public UCCProgramServiceValidator(BahmniProgramWorkflowService bahmniProgramWorkflowService) {
         this.bahmniProgramWorkflowService = bahmniProgramWorkflowService;
     }
+
+    public UCCProgramServiceValidator(){}
+
     @Override
     public void validate(PatientProgram patientProgram) throws APIException {
         for (PatientProgramAttribute patientProgramAttribute :

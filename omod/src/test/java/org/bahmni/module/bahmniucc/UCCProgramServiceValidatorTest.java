@@ -29,8 +29,8 @@ public class UCCProgramServiceValidatorTest {
 
     @Test(expected = APIException.class)
     public void shouldThrowExceptionWhenIDNumberIsAlreadyInUse() throws Exception {
-        when(bahmniProgramWorkflowService.getPatientProgramByAttributeNameAndValue(any(String.class), any(String.class))).thenReturn(Arrays.asList((BahmniPatientProgram) getPatientProgram("ID Number", "123")));
-        uccProgramServiceValidator.validate(getPatientProgram("ID Number", "123"));
+        when(bahmniProgramWorkflowService.getPatientProgramByAttributeNameAndValue(any(String.class), any(String.class))).thenReturn(Arrays.asList((BahmniPatientProgram) getPatientProgram("ID_Number", "123")));
+        uccProgramServiceValidator.validate(getPatientProgram("ID_Number", "123"));
     }
 
     private PatientProgram getPatientProgram(String key, String value) {

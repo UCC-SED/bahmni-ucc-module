@@ -11,6 +11,7 @@
 	<artifactId>bahmniucc-omod</artifactId>
 	<packaging>jar</packaging>
 	<name>Bahmni UCC Module OMOD</name>
+	<version>${bahmniUCCVersion}</version>
 	<description>OMOD project for Bahmni UCC Module</description>
 
 	<properties>
@@ -44,6 +45,32 @@
 
 
 		<!-- Begin OpenMRS core -->
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>emrapi-api-1.12</artifactId>
+			<version>1.23.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>emrapi-api</artifactId>
+			<version>1.23.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bahmni.module</groupId>
+			<artifactId>bahmni-emr-api</artifactId>
+			<version>${bahmniVersion}</version>
+			<scope>provided</scope>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>legacyui-omod</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
@@ -85,6 +112,23 @@
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>webservices.rest-omod</artifactId>
+			<version>2.17</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>webservices.rest-omod-common</artifactId>
+			<version>${openMRSWebServicesVersion}</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+
+
 
 		<!-- End OpenMRS core -->
 

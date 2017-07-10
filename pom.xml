@@ -33,6 +33,8 @@
 		<hamcrestVersion>1.3</hamcrestVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
 		<jacocoVersion>0.7.9</jacocoVersion>
+		<bahmniUCCVersion>1.0-SNAPSHOT</bahmniUCCVersion>
+		<openMRSWebServicesVersion>2.17</openMRSWebServicesVersion>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -51,6 +53,19 @@
 
 
 			<!-- Begin OpenMRS core -->
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>emrapi-api-1.12</artifactId>
+				<version>1.17</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>emrapi-api</artifactId>
+				<version>1.17</version>
+				<scope>provided</scope>
+			</dependency>
 
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
@@ -89,6 +104,38 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>legacyui-omod</artifactId>
+				<version>1.0</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>webservices.rest-omod</artifactId>
+				<version>${openMRSWebServicesVersion}</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>webservices.rest-omod-common</artifactId>
+				<version>${openMRSWebServicesVersion}</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.bahmni.module</groupId>
+				<artifactId>bahmni-emr-api</artifactId>
+				<version>${bahmniVersion}</version>
+				<scope>provided</scope>
+				<type>jar</type>
+			</dependency>
+
+
 
 			<!-- End OpenMRS core -->
 
