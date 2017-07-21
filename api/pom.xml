@@ -13,6 +13,15 @@
 	<name>Bahmni UCC Module API</name>
 	<description>API project for Bahmni UCC Module</description>
 
+	<properties>
+		<MODULE_ID>bahmniucc</MODULE_ID>
+		<MODULE_NAME>${project.name}</MODULE_NAME>
+		<MODULE_VERSION>${project.version}</MODULE_VERSION>
+		<MODULE_PACKAGE>${project.groupId}.${MODULE_ID}</MODULE_PACKAGE>
+		<bahmniVersion>0.89-SNAPSHOT</bahmniVersion>
+	</properties>
+
+
 	<dependencies>
 
 		<!--
@@ -61,8 +70,15 @@
 			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.bahmni.module</groupId>
+			<artifactId>bahmnicore-api</artifactId>
+			<version>${bahmniVersion}</version>
+			<scope>provided</scope>
+			<type>jar</type>
+		</dependency>
 
-		<!-- End OpenMRS core -->
+        <!-- End OpenMRS core -->
 
 	</dependencies>
 

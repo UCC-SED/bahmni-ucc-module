@@ -46,5 +46,9 @@
 		<file>messages_es.properties</file>
 	</messages>
 	<!-- /Internationalization -->
+	<advice>
+		<point>org.openmrs.api.PatientService</point>
+		<class>org.bahmni.module.bahmniucc.patient.advice.BeforeSaveAdvice</class>
+	</advice>
 </module>
 
