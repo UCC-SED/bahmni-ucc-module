@@ -28,7 +28,7 @@
 
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
-
+      hibernate.cfg.xml
 	</mappingFiles>
 
 	<!-- Internationalization -->

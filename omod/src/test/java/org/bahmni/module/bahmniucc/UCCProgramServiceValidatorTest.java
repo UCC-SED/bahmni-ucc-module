@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.APIException;
+import org.openmrs.api.db.PatientDAO;
 
 import java.util.Arrays;
 
@@ -20,11 +21,12 @@ public class UCCProgramServiceValidatorTest {
     @Mock
     private BahmniProgramWorkflowService bahmniProgramWorkflowService;
     private UCCProgramServiceValidator uccProgramServiceValidator;
+    private PatientDAO patientDao;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        uccProgramServiceValidator = new UCCProgramServiceValidator(bahmniProgramWorkflowService);
+        uccProgramServiceValidator = new UCCProgramServiceValidator(bahmniProgramWorkflowService, patientDao);
     }
 
     @Test(expected = APIException.class)

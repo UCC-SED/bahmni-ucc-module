@@ -77,9 +77,12 @@
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
+        <dependency>
+            <groupId>org.bahmni.module</groupId>
+            <artifactId>bahmnicore-api</artifactId>
+        </dependency>
 
         <!-- End OpenMRS core -->
-
 	</dependencies>
 
 	<build>
