@@ -3,6 +3,7 @@ package org.bahmni.module.bahmniucc.patient.advice;
 import org.bahmni.module.bahmniucc.patient.validations.PatientDeathValidation;
 import org.bahmni.module.bahmniucc.patient.validations.UCCValidationRules;
 import org.openmrs.Patient;
+import org.openmrs.api.APIException;
 import org.springframework.aop.MethodBeforeAdvice;
 
 import java.lang.reflect.Method;
