@@ -58,4 +58,11 @@ public class PatientDeathValidation implements UCCValidationRules {
             }
         }
     }
+
+    @Override
+    public void sendConsultationOrder() {
+
+    }
+
+
 }

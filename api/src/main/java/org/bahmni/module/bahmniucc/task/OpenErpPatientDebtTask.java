@@ -1,8 +1,11 @@
 package org.bahmni.module.bahmniucc.task;
 
 import org.apache.log4j.Logger;
+import org.bahmni.module.bahmniucc.client.DebtClient;
+import org.bahmni.module.bahmniucc.client.OpenErpPatientFeedClient;
 import org.bahmni.module.bahmniucc.client.impl.OpenErpPatientFeedClientImpl;
 import org.bahmni.module.bahmniucc.db.impl.DebtorRowDAOImpl;
+import org.openmrs.api.context.Context;
 import org.openmrs.scheduler.tasks.AbstractTask;
 
 /**
@@ -11,17 +14,12 @@ import org.openmrs.scheduler.tasks.AbstractTask;
 public class OpenErpPatientDebtTask extends AbstractTask {
 
     private Logger logger = Logger.getLogger(OpenErpPatientDebtTask.class);
-    private DebtorRowDAOImpl debtorDAO = new DebtorRowDAOImpl();
+
 
     @Override
     public void execute() {
-        OpenErpPatientFeedClientImpl feedClient = new OpenErpPatientFeedClientImpl();
+        DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
         feedClient.processFeed();
-
-
-       // logger.info("Just Running");
-
-
     }
 
 

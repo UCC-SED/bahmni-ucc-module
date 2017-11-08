@@ -16,16 +16,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static org.bahmni.module.bahmniucc.UCCModuleConstants.EXPOSED_INFANT_PROGRAM_ID;
-import static org.bahmni.module.bahmniucc.UCCModuleConstants.EXPOSED_INFANT_PROGRAM_MINIMUM_AGE;
-import static org.bahmni.module.bahmniucc.UCCModuleConstants.PROGRAM_ATTRIBUTE_ID_NO;
+import static org.bahmni.module.bahmniucc.UCCModuleConstants.*;
 
 @Component
 public class UCCProgramServiceValidator implements BahmniProgramServiceValidator {
     @Autowired
     private BahmniProgramWorkflowService bahmniProgramWorkflowService;
     private PatientDAO patientDao;
-    private static final Log log = LogFactory.getLog(UCCProgramServiceValidator.class);
+    private  Log log = LogFactory.getLog(UCCProgramServiceValidator.class);
 
     @Autowired
     public UCCProgramServiceValidator(BahmniProgramWorkflowService bahmniProgramWorkflowService, PatientDAO patientDao) {
@@ -45,20 +43,33 @@ public class UCCProgramServiceValidator implements BahmniProgramServiceValidator
                 if (isPatientProgramExists(patientProgram, bahmniPatientPrograms)) {
                     throw new APIException("ID Number is already in use");
                 }
-               // validateExposedInfantID(patientProgram, bahmniPatientPrograms);
             }
         }
 
 
         Patient patient = ((BahmniPatientProgram) patientProgram).getPatient();
         if (((BahmniPatientProgram) patientProgram).getProgram().getProgramId() == EXPOSED_INFANT_PROGRAM_ID && patient.getPerson().getAge() > EXPOSED_INFANT_PROGRAM_MINIMUM_AGE) {
-            throw new APIException("You Can not Enroll a Patient who is more than years " + EXPOSED_INFANT_PROGRAM_MINIMUM_AGE + " old in Exposed Infant Program");
+            throw new APIException("You can not Enroll a Patient who is more than years " + EXPOSED_INFANT_PROGRAM_MINIMUM_AGE + " old in Exposed Infant Program");
+        }
+
+
+        if (((BahmniPatientProgram) patientProgram).getProgram().getProgramId() == ANC_PROGRAM_ID
+                && patient.getPerson().getGender().equalsIgnoreCase(MALE)   ) {
+            throw new APIException("You can not Enroll a Male Patient or Age less than 10 years old in ANC Program");
+        }else
+        {
+            log.info(((BahmniPatientProgram) patientProgram).getProgram().getProgramId());
+            log.info(ANC_PROGRAM_ID);
+            log.info(patient.getPerson().getAge() );
+            log.info(PREGNANT_MINIMUM_AGE);
+            log.info(patient.getPerson().getGender() );
+            log.info(MALE);
         }
     }
 
 
     private void validateExposedInfantID(PatientProgram patientProgram, List<BahmniPatientProgram> bahmniPatientPrograms) {
-        if (((BahmniPatientProgram) patientProgram).getProgram().getProgramId() == EXPOSED_INFANT_PROGRAM_ID ) {
+        if (((BahmniPatientProgram) patientProgram).getProgram().getProgramId() == EXPOSED_INFANT_PROGRAM_ID) {
             {
                 log.info("Exposed Infant Program");
                 if (isProgramExists(patientProgram, bahmniPatientPrograms)) {
@@ -67,7 +78,7 @@ public class UCCProgramServiceValidator implements BahmniProgramServiceValidator
             }
         }
 
-        }
+    }
 
 
     private boolean isProgramExists(PatientProgram patientProgram, List<BahmniPatientProgram> bahmniPatientPrograms) {

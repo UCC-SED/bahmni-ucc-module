@@ -28,7 +28,7 @@
 
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
-      hibernate.cfg.xml
+		DebtorRow.hbm.xml
 	</mappingFiles>
 
 	<!-- Internationalization -->
@@ -50,5 +50,11 @@
 		<point>org.openmrs.api.PatientService</point>
 		<class>org.bahmni.module.bahmniucc.patient.advice.BeforeSaveAdvice</class>
 	</advice>
+
+	<advice>
+		<point>org.openmrs.api.VisitService</point>
+		<class>org.bahmni.module.bahmniucc.patient.advice.AfterSaveAdvice</class>
+	</advice>
+
 </module>
 

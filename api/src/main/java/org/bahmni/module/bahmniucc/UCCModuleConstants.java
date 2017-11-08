@@ -10,6 +10,7 @@ public class UCCModuleConstants {
     public static final String DRUG_BDQ = "Bedaquiline";
     public static final String DRUG_DELAMANID = "Delamanid";
     public static final String PROGRAM_ATTRIBUTE_HIV_STATUS="HIV Status";
+    public static final String SUPERSETURL = "http://41.217.202.49/api/api.php";
 
     private UCCModuleConstants() {}
 
@@ -30,7 +31,10 @@ public class UCCModuleConstants {
     public static final String DEATH_REGISTRY_DEATH_DATE ="Daftari la Kifo - Tarehe ya Kifo" ;
     public static final String DEATH_REGISTRY_CAUSE_OF_DEATH ="Daftari la Kifo - Tarehe ya Kifo" ;
     public static final int EXPOSED_INFANT_PROGRAM_ID = 3;
+    public static final int ANC_PROGRAM_ID= 5;
+    public static final String MALE="M";
     public static final int EXPOSED_INFANT_PROGRAM_MINIMUM_AGE = 2;
+    public static final int PREGNANT_MINIMUM_AGE = 10;
 
     public static final String OPENERP_HOST = "197.250.7.213";
     public static final int OPENERP_PORT = 8069;
@@ -48,5 +52,8 @@ public class UCCModuleConstants {
     public static final String OPENERP_AMOUNT_ELEMENT = "chargeable_amount";
     public static final String OPENERP_QUANTITY_ELEMENT = "default_quantity";
     public static final String OPENERP_DATE_ELEMENT = "date_order";
+
+    public static final String OPENERP_ID_ELEMENT = "id";
+
 
 }

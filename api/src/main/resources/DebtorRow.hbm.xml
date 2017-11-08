@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.bahmni.module.bahmniucc.model">
+
+    <class name="DebtorRow" table="openerp_debtor_list">
+        <id name="id" column="id" type="java.lang.Integer">
+            <generator class="native">
+            </generator>
+        </id>
+        <discriminator column="id" insert="false" />
+        <property name="invoice_id">
+            <column name="invoice_id" sql-type="varchar(500)" length="500"/>
+        </property>
+        <property name="patient_id">
+            <column name="patient_id" sql-type="varchar(500)" length="500"/>
+        </property>
+
+        <property name="patient_name">
+            <column name="patient_name" sql-type="varchar(500)" length="500"/>
+        </property>
+
+
+        <property name="product_name">
+            <column name="product_name" sql-type="varchar(500)" length="500"/>
+        </property>
+
+        <property name="default_quantity">
+            <column name="default_quantity" sql-type="double" length="500"/>
+        </property>
+
+        <property name="comment">
+            <column name="comment" sql-type="varchar(500)" length="500"/>
+        </property>
+
+        <property name="date_created" type="java.util.Date" column="date_created"
+                  length="19"/>
+    </class>
+</hibernate-mapping>

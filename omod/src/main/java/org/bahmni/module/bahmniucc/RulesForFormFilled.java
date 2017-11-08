@@ -44,11 +44,12 @@ public class RulesForFormFilled implements EncounterDataPreSaveCommand {
         this.episodeDAO = episodeDAO;
         this.encounterService = encounterService;
         this.patientDao = patientDao;
+
     }
 
     @Override
     public BahmniEncounterTransaction update(BahmniEncounterTransaction bahmniEncounterTransaction) {
-        rulesForFilledForms(bahmniEncounterTransaction);
+        //rulesForFilledForms(bahmniEncounterTransaction);
         return bahmniEncounterTransaction;
     }
 
@@ -89,7 +90,7 @@ public class RulesForFormFilled implements EncounterDataPreSaveCommand {
                     Patient pateint = patientDao.getPatientByUuid(bahmniEncounterTransaction.getPatientUuid());
                     Person person = pateint.getPerson();
                     person.setDead(true);
-                    person.setDeathDate(getDate(returnObs.getValue()));
+                   // person.setDeathDate(getDate(returnObs.getValue()));
                     VisitService visitService = Context.getVisitService();
 
                     List<Visit> openVisits = visitService.getVisits(null, null, null, null, null, null, null, null, null, false, false);
