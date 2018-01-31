@@ -39,6 +39,7 @@ public interface DebtorRowDAO {
     void storeAuthenticationHeader(String header, String issue_date, String expire_date);
 
     String checkDuplicateStatus(String name, String gender, String birthdate, String street, String council, String district, String region);
+    List searchTribes(String searchNames);
 
 
 }

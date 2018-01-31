@@ -76,6 +76,11 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
        return  debtorRowDAO.checkDuplicateStatus(name, gender,  birthdate,  street, council, district, region);
     }
 
+    @Override
+    public List searchTribes(String searchNames) {
+        return  debtorRowDAO.searchTribes(searchNames);
+    }
+
 
     @Override
     public ArrayList<NotificationResult> processNotifications(String patientUuid, String visitUuid) {

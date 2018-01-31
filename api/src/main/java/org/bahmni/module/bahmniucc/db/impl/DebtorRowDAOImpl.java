@@ -159,6 +159,30 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
         return mainObj.toJSONString();
     }
 
+    @Override
+    public List searchTribes(String searchNames) {
+
+        String sql = "select id,tribe_name from tribes where tribe_name LIKE '%"+searchNames+"%'";
+
+
+        Query query = this.getSession().createSQLQuery(sql)
+                .setResultTransformer(Transformers.aliasToBean(Tribes.class));
+
+        List results = query.list();
+
+        if (results.size() > 0) {
+
+            return results;
+
+        } else {
+
+            logger.info("no tribe");
+            return null;
+        }
+
+
+    }
+
 
 
     @Override
