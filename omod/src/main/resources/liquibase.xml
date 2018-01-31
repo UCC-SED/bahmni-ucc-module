@@ -11,4 +11,10 @@
     </changeSet>
 
 
+    <changeSet id="bahmniefms-201808010935" author="Manyama, Ian">
+        <comment>Creating nhif_authentication_header</comment>
+        <sqlFile path="201808010935.sql"/>
+    </changeSet>
+
+
 </databaseChangeLog>

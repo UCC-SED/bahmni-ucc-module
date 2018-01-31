@@ -40,7 +40,7 @@ public class PatientConsultationFeeOrder implements UCCValidationRules {
 
             int findSaleOrderIdsForCustomer = util.findSaleOrderIdsForCustomer((int) loginID, customerid);
 
-            System.out.println("Sale Order " + findSaleOrderIdsForCustomer);
+            logger.info("Sale Order " + findSaleOrderIdsForCustomer);
 
             util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer);
 

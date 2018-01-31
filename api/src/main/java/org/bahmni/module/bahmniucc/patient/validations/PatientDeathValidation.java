@@ -3,6 +3,7 @@ package org.bahmni.module.bahmniucc.patient.validations;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.bahmni.module.bahmnicore.service.BahmniObsService;
 import org.openmrs.Concept;
 import org.openmrs.Patient;
@@ -24,7 +25,7 @@ import java.util.List;
 import static org.bahmni.module.bahmniucc.UCCModuleConstants.DEATH_REGISTRY_CONDITION;
 
 public class PatientDeathValidation implements UCCValidationRules {
-
+    private Logger logger = Logger.getLogger(getClass());
     @ManyToOne(cascade = CascadeType.ALL)
     private Patient patient;
 
@@ -61,7 +62,7 @@ public class PatientDeathValidation implements UCCValidationRules {
 
     @Override
     public void sendConsultationOrder() {
-
+        logger.info("Sending Consultation Fee");
     }
 
 

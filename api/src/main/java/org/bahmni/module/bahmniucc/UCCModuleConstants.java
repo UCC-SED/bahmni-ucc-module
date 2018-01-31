@@ -27,7 +27,9 @@ public class UCCModuleConstants {
     public static final String TB_PROGRAM ="TB - DOT Follow-Up template";
     public static final String TB_PROGRAM_NAME ="TB - DOT Follow-Up template";
     public static final String DEATH_REGISTRY_CONDITION ="Daftari la Kifo - Uchunguzi Umefanyika" ;
+    public static final String RCH_ENROLLMENT ="ANC - enrollment" ;
     public static final String DEATH_REGISTRY_FORM_NAME ="Daftari la Kifo" ;
+    public static final String ANC_LAST_MP_DATE ="ANC - Tarehe ya kwanza ya hedhi ya mara ya mwisho (LNMP)" ;
     public static final String DEATH_REGISTRY_DEATH_DATE ="Daftari la Kifo - Tarehe ya Kifo" ;
     public static final String DEATH_REGISTRY_CAUSE_OF_DEATH ="Daftari la Kifo - Tarehe ya Kifo" ;
     public static final int EXPOSED_INFANT_PROGRAM_ID = 3;
@@ -36,7 +38,8 @@ public class UCCModuleConstants {
     public static final int EXPOSED_INFANT_PROGRAM_MINIMUM_AGE = 2;
     public static final int PREGNANT_MINIMUM_AGE = 10;
 
-    public static final String OPENERP_HOST = "197.250.7.213";
+   public static final String OPENERP_HOST = "197.250.7.213";
+  // public static final String OPENERP_HOST = "192.168.33.10";
     public static final int OPENERP_PORT = 8069;
     public static final String OPENERP_DB = "openerp";
     public static final String OPENERP_USERNAME = "admin";

@@ -23,8 +23,8 @@ import static java.util.Arrays.asList;
 
 public class OpenERPUtils {
 
-
     public static final String HOST = "197.250.7.213";
+    //public static final String HOST = "192.168.33.10";
     public static final int PORT = 8069;
     public static final String SCHEME = "http";
     public static final String DATABASE = "openerp";
@@ -33,7 +33,6 @@ public class OpenERPUtils {
     public static final int PRODUCT_ID = 1960;
 
     private static Logger logger = Logger.getLogger(OpenERPUtils.class);
-
 
     private static void debug(Object[] orderObjects) {
         for (Object orderObject : orderObjects) {
@@ -70,7 +69,7 @@ public class OpenERPUtils {
         XmlRpcClient xmlrpcLogin = new XmlRpcClient();
         XmlRpcClientConfigImpl xmlrpcConfigLogin = new XmlRpcClientConfigImpl();
         xmlrpcConfigLogin.setEnabledForExtensions(true);
-        xmlrpcConfigLogin.setServerURL(new URL(SCHEME, HOST, PORT, "/xmlrpc/common"));
+        xmlrpcConfigLogin.setServerURL(new URL(SCHEME, AppGlobalProperties.OPENERP_HOST(), Integer.parseInt(AppGlobalProperties.OPENERP_PORT()), "/xmlrpc/common"));
         xmlrpcLogin.setConfig(xmlrpcConfigLogin);
         Object[] params = new Object[]{DATABASE, USER, PASSWORD};
         return (int) xmlrpcLogin.execute("login", params);
@@ -94,6 +93,7 @@ public class OpenERPUtils {
 
         return null;
     }
+
 
     private Object[] findSaleOrderIdsForCustomer(Integer connectionId, Integer erpCustomerId, XmlRpcClient xmlrpcClient) throws XmlRpcException {
         List criteria = new Vector();
@@ -125,12 +125,11 @@ public class OpenERPUtils {
         );
 
         /**
-         result - array of hashmap,
-         "ref":patient identifier (e.g GAN203006)
-         "uuid": emr patient uuid (e.g. "uuid" -> "6e6691b4-27c5-4733-9f26-342a28317423")
-         "sale_order_ids": array of int objects
-         "invoice_ids": : array of int objects
-         "id":ERP partner id (int)
+         * result - array of hashmap, "ref":patient identifier (e.g GAN203006)
+         * "uuid": emr patient uuid (e.g. "uuid" ->
+         * "6e6691b4-27c5-4733-9f26-342a28317423") "sale_order_ids": array of
+         * int objects "invoice_ids": : array of int objects "id":ERP partner id
+         * (int)
          */
         Object result = xmlrpcClient.execute("execute", readParams.toArray());
         return (Object[]) result;
@@ -138,18 +137,17 @@ public class OpenERPUtils {
     }
 
 
-    public void insertSaleOrderLine(int loginID, int orderID) throws MalformedURLException, XmlRpcException {
-
+    public String insertSaleOrderLine(int loginID, int orderID) throws MalformedURLException, XmlRpcException {
 
         XmlRpcClient xmlrpcClient = getXmlRpcClient();
 
         HashMap<Object, Object> params = new HashMap<Object, Object>();
 
         params.put("name", "Consultation Fee");
-        params.put("product_id", PRODUCT_ID);
+        params.put("product_id", AppGlobalProperties.GLOBAL_CONSULTATION_PRODUCT_ID());
         params.put("type", "make_to_stock");
         params.put("state", "draft");
-        params.put("price_unit", 1000);
+        params.put("price_unit", AppGlobalProperties.GLOBAL_CONSULTATION_AMOUNT());
         params.put("order_id", orderID);
 
         Vector<Object> arg = new Vector<Object>();
@@ -162,9 +160,11 @@ public class OpenERPUtils {
         arg.add(params);
 
         Object ret_id = xmlrpcClient.execute("execute", arg);
-        System.out.println("Created new partner address with id :" + ret_id.toString());
+        logger.info("Created new partner address with id :" + ret_id.toString());
+        return ret_id.toString();
 
     }
+
 
     public int createSaleorder(Integer connectionId, Integer erpCustomerId) throws MalformedURLException, XmlRpcException {
         XmlRpcClient xmlrpcClient = getXmlRpcClient();
@@ -191,7 +191,7 @@ public class OpenERPUtils {
         arg.add(params);
 
         Object ret_id = xmlrpcClient.execute("execute", arg);
-        System.out.println("Created new partner address with id :" + ret_id.toString());
+        logger.info("Created new partner address with id :" + ret_id.toString());
 
         return (int) ret_id;
     }
@@ -211,8 +211,7 @@ public class OpenERPUtils {
         );
         Object[] resultIds = (Object[]) xmlrpcClient.execute("execute", orderSearchParams.toArray());
 
-        System.out.println("Order Size " + resultIds.length);
-
+        logger.info("Order Size " + resultIds.length);
         if (resultIds.length == 0) {
 
             return createSaleorder(connectionId, erpCustomerId);
@@ -236,10 +235,43 @@ public class OpenERPUtils {
 
         XmlRpcClientConfigImpl xmlrpcConfig = new XmlRpcClientConfigImpl();
         xmlrpcConfig.setEnabledForExtensions(true);
-        xmlrpcConfig.setServerURL(new URL(SCHEME, HOST, PORT, "/xmlrpc/object"));
-
+        xmlrpcConfig.setServerURL(new URL(SCHEME, AppGlobalProperties.OPENERP_HOST(), Integer.parseInt(AppGlobalProperties.OPENERP_PORT()), "/xmlrpc/object"));
+        //xmlrpcConfig.setServerURL(new URL(SCHEME, HOST, PORT, "/xmlrpc/object"));
         xmlrpcClient.setConfig(xmlrpcConfig);
         return xmlrpcClient;
+    }
+
+    public Object[] findProduct(Integer connectionId, String productName) throws MalformedURLException, XmlRpcException {
+        XmlRpcClient xmlrpcClient = getXmlRpcClient();
+
+        List<Object> criteria = new ArrayList<Object>();
+//        criteria.add(asList("name", "=", customerName).toArray());
+//        criteria.add(asList("customer", "=", true).toArray());
+        criteria.add(asList("name", "=", productName).toArray());
+        List<Object> customerSearchParams = asList(
+                DATABASE, connectionId, PASSWORD, "product.product", "search", criteria
+        );
+        Object customerIds = xmlrpcClient.execute("execute", customerSearchParams.toArray());
+
+        criteria.clear();
+        Arrays.stream((Object[]) customerIds).forEach(e -> criteria.add(Integer.valueOf(e.toString())));
+        List<Object> readParams = asList(
+                DATABASE, connectionId, PASSWORD, "product.product", "read", criteria
+        );
+
+        /**
+         * result - array of hashmap, "ref":patient identifier (e.g GAN203006)
+         * "uuid": emr patient uuid (e.g. "uuid" ->
+         * "6e6691b4-27c5-4733-9f26-342a28317423") "sale_order_ids": array of
+         * int objects "invoice_ids": : array of int objects "id":ERP partner id
+         * (int)
+         */
+
+        System.out.println("Result " + readParams);
+
+        Object result = xmlrpcClient.execute("execute", readParams.toArray());
+        System.out.println("Result " + result);
+        return (Object[]) result;
     }
 
     public int findCustomers(Integer connectionId, String patientUuid) throws MalformedURLException, XmlRpcException {
@@ -256,9 +288,7 @@ public class OpenERPUtils {
 
     }
 
-
     public void sendGet(String url) throws Exception {
-
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -279,12 +309,9 @@ public class OpenERPUtils {
             logger.info(response.toString());
         }
 
-
     }
 
-
     public static void sendPost(String url, String load) throws Exception {
-
 
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
@@ -306,18 +333,16 @@ public class OpenERPUtils {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
             String inputLine;
-             response = new StringBuffer();
+            response = new StringBuffer();
 
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
 
-
         }
 
         logger.info(response.toString());
-
     }
 
 

@@ -8,6 +8,8 @@ import org.bahmni.module.bahmniucc.UCCModuleConstants;
 import org.bahmni.module.bahmniucc.client.OpenErpPatientFeedClient;
 import org.bahmni.module.bahmniucc.db.DebtorRowDAO;
 import org.bahmni.module.bahmniucc.model.DebtorRow;
+import org.bahmni.module.bahmniucc.model.Notification;
+import org.bahmni.module.bahmniucc.model.NotificationResult;
 import org.bahmni.module.bahmniucc.util.OpenERPUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.*;
  */
 @Component("openErpPatientFeedClient")
 public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
+
     private Logger logger = Logger.getLogger(getClass());
     private DebtorRowDAO debtorRowDAO;
 
@@ -29,7 +32,6 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
     public OpenErpPatientFeedClientImpl(DebtorRowDAO debtorRowDAO) {
         this.debtorRowDAO = debtorRowDAO;
     }
-
 
     @Override
     public void processFeed() {
@@ -57,20 +59,49 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
 
 
     @Override
+    public String readAuthenticationHeader() {
+        String authenticationHeader = debtorRowDAO.readAuthenticationHeader();
+        return authenticationHeader;
+    }
+
+
+    @Override
+    public void storeAuthenticationHeader(String header, String issue_date, String expire_date) {
+      debtorRowDAO.storeAuthenticationHeader( header,  issue_date,  expire_date);
+
+    }
+
+    @Override
+    public String checkDuplicateStatus(String name, String gender, String birthdate, String street, String council, String district, String region) {
+       return  debtorRowDAO.checkDuplicateStatus(name, gender,  birthdate,  street, council, district, region);
+    }
+
+
+    @Override
+    public ArrayList<NotificationResult> processNotifications(String patientUuid, String visitUuid) {
+        ArrayList<NotificationResult> notificationResultsList = new ArrayList<>();
+        ArrayList<Notification> notificationsList = debtorRowDAO.getNotifications();
+
+        for (int x = 0; x < notificationsList.size(); x++) {
+            NotificationResult notificationResult = debtorRowDAO.getNotificationResults(notificationsList.get(x));
+            notificationResult.setNotification(notificationsList.get(x));
+            notificationResultsList.add(notificationResult);
+        }
+        return notificationResultsList;
+    }
+
+    @Override
     public void saveHackTagData(String visitType) {
         debtorRowDAO.clearHack();
         debtorRowDAO.insertHack(visitType);
 
-
     }
-
 
     @Override
     public String getHackTagData() {
 
         return debtorRowDAO.readHack();
     }
-
 
     @Override
     public boolean getDrugBalance(String drugName) {
@@ -84,7 +115,6 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             return false;
         }
     }
-
 
     public void getFeedClient(int LoginID) {
 
@@ -116,7 +146,6 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             Object[] read = new Object[]{UCCModuleConstants.OPENERP_DB, LoginID, UCCModuleConstants.OPENERP_PASSWORD, UCCModuleConstants.OPENERP_ORDER_MODEL, UCCModuleConstants.OPENERP_READ_FUNCTION, result, searchQuery};
             Object resultread = (Object[]) xmlrpcLogin.execute("execute", read);
 
-
             Object[] a = (Object[]) resultread;
 
             List<DebtorRow> debtorList = new ArrayList<>();
@@ -141,9 +170,7 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             e.printStackTrace();
         }
 
-
     }
-
 
     public int Login() {
 
@@ -167,16 +194,11 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             logger.info(id);
 
             return -1;
-        } catch (XmlRpcException e) {
-
-            e.printStackTrace();
-            return -2;
         } catch (Exception e) {
             e.printStackTrace();
             return -3;
         }
     }
-
 
     public DebtorRow getDebtorElements(Map mp) {
         Iterator it = mp.entrySet().iterator();
@@ -210,7 +232,6 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             }
         }
 
-
         return debtor;
     }
 
@@ -239,7 +260,6 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             Object result = (Object[]) xmlrpcLogin.execute("execute", params);
 
             logger.info("result value " + ((Object[]) result)[0]);
-
 
             Object[] args = new Object[3];
             Object[] subarg = new Object[3];
@@ -289,8 +309,6 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
 
         }
 
-
     }
-
 
 }

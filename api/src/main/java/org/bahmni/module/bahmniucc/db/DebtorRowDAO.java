@@ -1,7 +1,12 @@
 package org.bahmni.module.bahmniucc.db;
 
 import org.bahmni.module.bahmniucc.model.DebtorRow;
+import org.bahmni.module.bahmniucc.model.Notification;
+import org.bahmni.module.bahmniucc.model.NotificationResult;
+import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,16 +19,26 @@ public interface DebtorRowDAO {
     /**
      * Clear all the results
      */
-    public void clearAllResults();
+    void clearAllResults();
 
-    public String readQuery();
+    String readQuery();
 
 
-    public void insertHack(String visitType);
+    void insertHack(String visitType);
 
-    public void clearHack();
+    void clearHack();
 
-    public String readHack();
+    String readHack();
+
+    ArrayList<Notification> getNotifications();
+
+    NotificationResult getNotificationResults(Notification notification);
+
+    String readAuthenticationHeader();
+
+    void storeAuthenticationHeader(String header, String issue_date, String expire_date);
+
+    String checkDuplicateStatus(String name, String gender, String birthdate, String street, String council, String district, String region);
 
 
 }

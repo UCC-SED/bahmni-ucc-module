@@ -21,13 +21,14 @@ public class AfterSaveAdvice implements AfterReturningAdvice {
     @Override
     public void afterReturning(Object o, Method method, Object[] objects, Object o1) throws Throwable {
 
-        if (method.getName().equalsIgnoreCase(SAVE_VISIT_METHOD_TO_INTERCEPT)) {
+     /*  if (method.getName().equalsIgnoreCase(SAVE_VISIT_METHOD_TO_INTERCEPT)) {
             Visit visit = (Visit) objects[0];
             if (visit.getStopDatetime() == null && visit.getEncounters().size() == 1) {
+                logger.info("Sending Consultation Fee");
                 UCCValidationRules patientConsultationFeeOrder = new PatientConsultationFeeOrder(visit);
-             //   patientConsultationFeeOrder.sendConsultationOrder();
+                patientConsultationFeeOrder.sendConsultationOrder();
             }
-        }
+        }*/
     }
 
 

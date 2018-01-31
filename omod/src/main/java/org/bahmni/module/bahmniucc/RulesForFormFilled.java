@@ -64,6 +64,7 @@ public class RulesForFormFilled implements EncounterDataPreSaveCommand {
 
         for (Map.Entry<String, List<BahmniObservation>> templateObs : mapOfTemplateForms.entrySet()) {
             String conceptName = templateObs.getKey();
+            log.info("conceptName " + conceptName);
             switch (conceptName) {
                 case CTC_VISIT_FORM:
                     if (bahmniEncounterTransaction.getPatientProgramUuid() == null) {
@@ -102,6 +103,10 @@ public class RulesForFormFilled implements EncounterDataPreSaveCommand {
                             // visitService.voidVisit(openVisit,"Patient Is Dead");
                         }
                     }
+                    case RCH_ENROLLMENT:
+                        log.info("RCH ENROLLMENT");
+                        getObsValue(bahmniEncounterTransaction.getObservations(), ANC_LAST_MP_DATE);
+
             }
         }
     }
