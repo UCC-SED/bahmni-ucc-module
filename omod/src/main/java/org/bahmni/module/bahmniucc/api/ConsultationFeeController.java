@@ -6,10 +6,11 @@
 package org.bahmni.module.bahmniucc.api;
 
 /**
- *
  * @author ucc-ian
  */
+
 import java.net.MalformedURLException;
+
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.bahmni.module.bahmniucc.client.DebtClient;
@@ -42,11 +43,17 @@ public class ConsultationFeeController extends BaseRestController {
 
         Object loginID = util.login();
         int customerid = util.findCustomers((int) loginID, patientIdentifier);
-        int findSaleOrderIdsForCustomer = util.findSaleOrderIdsForCustomer((int) loginID, customerid);
-        String orderId=util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer);
+        if (util.checkIfCustomerConsultationExemption((int) loginID, customerid)) {
+            int findSaleOrderIdsForCustomer = util.findSaleOrderIdsForCustomer((int) loginID, customerid);
+            String orderId = util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer);
 
-        JSONObject obj = new JSONObject();
-        return obj.toJSONString();
+            JSONObject obj = new JSONObject();
+            return obj.toJSONString();
+        } else {
+            JSONObject obj = new JSONObject();
+            return obj.toJSONString();
+        }
     }
+
 
 }

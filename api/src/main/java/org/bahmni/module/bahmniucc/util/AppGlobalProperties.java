@@ -26,6 +26,8 @@ public class AppGlobalProperties implements GlobalPropertyListener {
 	public static final String OPENERP_HOST = "openerp.host";
 
 	public static final String OPENERP_PORT = "openerp.port";
+
+	public static final String CONSULTATION_EXEMPTION_NO_DAYS= "cons.exemption.days";
 	
 	public static final List<String> CACHED_PROPERTIES = Arrays.asList(GLOBAL_CONSULTATION_PRODUCT_ID,
 			GLOBAL_CONSULTATION_AMOUNT, OPENERP_HOST, OPENERP_PORT);
@@ -49,13 +51,20 @@ public class AppGlobalProperties implements GlobalPropertyListener {
 		return propertyValue;
 	}
 
+	public static final String CONSULTATION_EXEMPTION_NO_DAYS() {
+		String propertyValue = Context.getAdministrationService().getGlobalProperty(CONSULTATION_EXEMPTION_NO_DAYS);
+
+		return propertyValue;
+	}
+
 	public static final String OPENERP_PORT() {
 		String propertyValue = Context.getAdministrationService().getGlobalProperty(OPENERP_PORT);
 
 		return propertyValue;
 	}
 
-	
+
+
 	@Override
 	public boolean supportsPropertyName(String s) {
 		return CACHED_PROPERTIES.contains(s);
