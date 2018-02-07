@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -217,6 +218,37 @@ public class OpenERPUtils {
             return createSaleorder(connectionId, erpCustomerId);
         } else {
             return (int) resultIds[0];
+        }
+    }
+
+
+    public boolean checkIfCustomerConsultationExemption(Integer connectionId, Integer erpCustomerId) throws XmlRpcException, MalformedURLException {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, -(Integer.parseInt(AppGlobalProperties.CONSULTATION_EXEMPTION_NO_DAYS())));
+        Date dateBefore30Days = cal.getTime();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        System.out.println(dateBefore30Days + " ");
+        XmlRpcClient xmlrpcClient = getXmlRpcClient();
+        List criteria = new Vector();
+        criteria.add(asList("partner_id", "=", erpCustomerId).toArray());
+        criteria.add(asList("state", "=", "progress").toArray());
+        criteria.add(asList("create_date", ">", dateFormat.format(dateBefore30Days)).toArray());
+        List<Object> orderSearchParams = asList(
+                DATABASE, connectionId, PASSWORD, "sale.order", "search", criteria
+        );
+        Object[] resultIds = (Object[]) xmlrpcClient.execute("execute", orderSearchParams.toArray());
+
+        System.out.println("Order Size " + resultIds.length);
+
+        if (resultIds.length == 0) {
+
+            return true;
+        } else {
+            return false;
         }
     }
 
