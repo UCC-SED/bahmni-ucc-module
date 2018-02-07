@@ -183,6 +183,31 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
 
     }
 
+    @Override
+    public List getPatientInDept() {
+
+        String sql = "select patient_id from openerp_debtor_list";
+
+
+        Query query = this.getSession().createSQLQuery(sql)
+                .setResultTransformer(Transformers.aliasToBean(PatientInDepts.class));
+
+        List results = query.list();
+
+        if (results.size() > 0) {
+
+            return results;
+
+        } else {
+
+            logger.info("no patient in dept");
+            return null;
+        }
+
+
+    }
+
+
 
 
     @Override

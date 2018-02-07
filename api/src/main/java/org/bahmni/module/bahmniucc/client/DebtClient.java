@@ -30,6 +30,7 @@ public interface DebtClient {
 
     String checkDuplicateStatus(String name, String gender, String birthdate, String street, String council, String district, String region);
     List searchTribes(String searchNames);
+    List getPatientInDept();
 
 }
 

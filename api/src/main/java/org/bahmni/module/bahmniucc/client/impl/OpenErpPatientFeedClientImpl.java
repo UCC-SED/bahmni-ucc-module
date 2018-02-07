@@ -81,6 +81,11 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
         return  debtorRowDAO.searchTribes(searchNames);
     }
 
+    @Override
+    public List getPatientInDept() {
+        return  debtorRowDAO.getPatientInDept();
+    }
+
 
     @Override
     public ArrayList<NotificationResult> processNotifications(String patientUuid, String visitUuid) {
