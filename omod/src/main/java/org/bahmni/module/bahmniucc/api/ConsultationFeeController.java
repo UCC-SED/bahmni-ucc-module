@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.bahmni.module.bahmniucc.client.DebtClient;
 import org.bahmni.module.bahmniucc.client.OpenErpPatientFeedClient;
+import org.bahmni.module.bahmniucc.controller.PatientBillingCategoryController;
 import org.bahmni.module.bahmniucc.util.OpenERPUtils;
 import org.json.simple.JSONObject;
 import org.openmrs.api.context.Context;
@@ -37,23 +38,61 @@ public class ConsultationFeeController extends BaseRestController {
     OpenERPUtils util = new OpenERPUtils();
     private Logger logger = Logger.getLogger(getClass());
 
+    PatientBillingCategoryController billingCategoryController = PatientBillingCategoryController.getInstance();
+
     @RequestMapping(method = RequestMethod.GET, value = "createConsultationQuotation")
     @ResponseBody
-    public String getDrugStatus(@RequestParam("patientIdentifier") String patientIdentifier) throws Exception {
+    public String getDrugStatus(@RequestParam("patientIdentifier") String patientIdentifier, @RequestParam("paymentCategoryName") String paymentCategoryName) throws Exception {
 
-        Object loginID = util.login();
-        int customerid = util.findCustomers((int) loginID, patientIdentifier);
-        if (util.checkIfCustomerConsultationExemption((int) loginID, customerid)) {
-            int findSaleOrderIdsForCustomer = util.findSaleOrderIdsForCustomer((int) loginID, customerid);
-            String orderId = util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer);
 
+        if(updateSingleDeliveryOrder( patientIdentifier,  paymentCategoryName)) {
+            Object loginID = util.login();
+            logger.info("patientIdentifier " + patientIdentifier);
+            int customerid = util.findCustomers((int) loginID, patientIdentifier, true);
+
+            if (customerid == 0) {
+                JSONObject obj = new JSONObject();
+                obj.put("status", false);
+                return obj.toJSONString();
+            }
+
+            if (util.checkIfCustomerConsultationExemption((int) loginID, customerid)) {
+                int findSaleOrderIdsForCustomer = util.findSaleOrderIdsForCustomer((int) loginID, customerid);
+                String orderId = util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer);
+
+                JSONObject obj = new JSONObject();
+                obj.put("orderId", orderId);
+                obj.put("exemptioStatus", false);
+                obj.put("status", true);
+                return obj.toJSONString();
+            } else {
+                logger.info("Exempted form Consultation Fee");
+                JSONObject obj = new JSONObject();
+                obj.put("exemptioStatus", true);
+                obj.put("status", true);
+                return obj.toJSONString();
+            }
+        }else
+        {
             JSONObject obj = new JSONObject();
-            return obj.toJSONString();
-        } else {
-            JSONObject obj = new JSONObject();
+            obj.put("status", false);
             return obj.toJSONString();
         }
     }
 
+
+    public boolean updateSingleDeliveryOrder(String patientIdentifier, String paymentCategoryName) throws Exception {
+
+
+        logger.info("patientIdentifier " + patientIdentifier);
+        logger.info("paymentCategoryName " + paymentCategoryName);
+
+        Object loginID = util.login();
+        int customerid = util.findCustomers((int) loginID, patientIdentifier, true);
+
+        boolean updateStatus = billingCategoryController.updateBillingCategory(paymentCategoryName, patientIdentifier, customerid, (int) loginID);
+
+        return updateStatus;
+    }
 
 }

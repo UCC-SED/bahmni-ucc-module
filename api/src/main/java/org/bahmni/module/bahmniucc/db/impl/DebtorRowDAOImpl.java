@@ -9,6 +9,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.joda.time.DateTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 
@@ -31,32 +32,97 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
 
 
     @Override
+    public int readBillingCategoryIdByName(String categoryName)
+    {
+
+        String sql = "select id, category_name,erp_pricelist_id, record_date from openerp_pricelist_mapping where category_name ='" + categoryName + "'";
+
+        Query query = this.getSession().createSQLQuery(sql)
+                .setResultTransformer(Transformers.aliasToBean(BillingCategory.class));
+        List results = query.list();
+
+        if (results.size() > 0) {
+            BillingCategory billingCategory = (BillingCategory) results.get(0);
+            return billingCategory.getErp_pricelist_id();
+
+        } else {
+            return 1;
+        }
+
+    }
+
+    @Override
     public void saveDebtorRow(List<DebtorRow> results) {
         DbSession session = getSession();
         for (DebtorRow result : results) {
+            if (checkIFPatientIsActiveAndInCashPaymentMode(result.getPatient_id())) {
+                String save_sql = "INSERT INTO openerp_debtor_list\n" +
+                        "(invoice_id,\n" +
+                        "patient_id,\n" +
+                        "patient_name,\n" +
+                        "chargeable_amount,\n" +
+                        "default_quantity,\n" +
+                        "date_created)\n" +
+                        "VALUES\n" +
+                        "( '" + result.getInvoice_id() + "'," +
+                        "'" + result.getPatient_id() + "'," +
+                        "'" + result.getPatient_name() + "'," +
+                        "'" + result.getChargeable_amount() + "'," +
+                        "'" + result.getDefault_quantity() + "'," +
+                        "'" + result.getDate_created() + "')";
 
-
-            String save_sql = "INSERT INTO openerp_debtor_list\n" +
-                    "(invoice_id,\n" +
-                    "patient_id,\n" +
-                    "patient_name,\n" +
-                    "chargeable_amount,\n" +
-                    "default_quantity,\n" +
-                    "date_created)\n" +
-                    "VALUES\n" +
-                    "( '" + result.getInvoice_id() + "'," +
-                    "'" + result.getPatient_id() + "'," +
-                    "'" + result.getPatient_name() + "'," +
-                    "'" + result.getChargeable_amount() + "'," +
-                    "'" + result.getDefault_quantity() + "'," +
-                    "'" + result.getDate_created() + "')";
-
-
-            getSession().createSQLQuery(save_sql).executeUpdate();
-            // session.save(result);
+                logger.info("saveDebtorRow " + save_sql);
+                getSession().createSQLQuery(save_sql).executeUpdate();
+            }
         }
     }
 
+
+    public boolean checkIFPatientIsActiveAndInCashPaymentMode(String patientID) {
+        String sql = "SELECT DISTINCT\n" +
+                "    pi.identifier AS patientID\n" +
+                "FROM\n" +
+                "    visit v\n" +
+                "        JOIN\n" +
+                "    person_name pn ON v.patient_id = pn.person_id\n" +
+                "        AND pn.voided = 0\n" +
+                "        JOIN\n" +
+                "    patient_identifier pi ON v.patient_id = pi.patient_id\n" +
+                "        JOIN\n" +
+                "    (SELECT distinct test_obs.person_id,\n" +
+                "        test_obs.obs_group_id,\n" +
+                "            test_obs.concept_id,\n" +
+                "            test_obs.obs_datetime,\n" +
+                "            test_obs.value_coded AS paymentCategory\n" +
+                "    FROM\n" +
+                "        obs test_obs\n" +
+                "    INNER JOIN concept c ON c.concept_id = test_obs.concept_id\n" +
+                "        AND test_obs.voided = 0\n" +
+                "    INNER JOIN concept_name cn ON c.concept_id = cn.concept_id\n" +
+                "        AND cn.concept_name_type = 'FULLY_SPECIFIED'\n" +
+                "        AND cn.name IN ('Payment Category')\n" +
+                "    WHERE\n" +
+                "        test_obs.value_coded = 4030  AND\n" +
+                "        test_obs.obs_datetime= (select MAX(obs_datetime) from obs obs2 where obs2.obs_id=test_obs.obs_id)) AS cp ON cp.person_id = pn.person_id\n" +
+                "WHERE\n" +
+                "    v.date_stopped IS NULL AND v.voided = 0";
+
+
+        Query query = this.getSession().createSQLQuery(sql)
+                .setResultTransformer(Transformers.aliasToBean(PatientIdentifiers.class));
+
+        List results = query.list();
+        logger.info("Sizeee " + results.size());
+        for (int x = 0; x < results.size(); x++) {
+            if (((PatientIdentifiers) results.get(x)).getPatientID().equalsIgnoreCase(patientID)) {
+                return true;
+            }
+        }
+
+        return false;
+
+
+    }
 
     @Override
     public void clearAllResults() {
@@ -95,7 +161,6 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
     public String checkDuplicateStatus(String name, String gender, String birthdate, String street, String council, String district, String region) {
 
 
-
         String sql = "select distinct\n" +
                 "          concat(pn.given_name,' ', pn.family_name) as name,\n" +
                 "          pi.identifier as identifier,\n" +
@@ -119,7 +184,7 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
                 " concat(pn.given_name,' ', pn.family_name)='" + name + "' and " +
                 "pe.birthdate='" + birthdate + "' and " +
                 "pea.address2='" + street + "' and " +
-                "pea.county_district='" + district + "'and "  +
+                "pea.county_district='" + district + "'and " +
                 " pea.address3='" + council + "' and " +
                 "  pea.address4='" + region + "'";
         logger.info("checkDuplicateStatus sql " + sql);
@@ -162,7 +227,7 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
     @Override
     public List searchTribes(String searchNames) {
 
-        String sql = "select id,tribe_name from tribes where tribe_name LIKE '%"+searchNames+"%'";
+        String sql = "select id,tribe_name from tribes where tribe_name LIKE '%" + searchNames + "%'";
 
 
         Query query = this.getSession().createSQLQuery(sql)
@@ -206,8 +271,6 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
 
 
     }
-
-
 
 
     @Override

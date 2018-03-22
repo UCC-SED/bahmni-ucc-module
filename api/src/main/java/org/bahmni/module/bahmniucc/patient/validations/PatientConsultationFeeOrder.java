@@ -36,7 +36,7 @@ public class PatientConsultationFeeOrder implements UCCValidationRules {
         try {
             Object loginID=util.login();
 
-            int customerid = util.findCustomers((int) loginID,visit.getPatient().getPatientIdentifier().getIdentifier());
+            int customerid = util.findCustomers((int) loginID,visit.getPatient().getPatientIdentifier().getIdentifier(), false);
 
             int findSaleOrderIdsForCustomer = util.findSaleOrderIdsForCustomer((int) loginID, customerid);
 

@@ -6,14 +6,34 @@
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
     <changeSet id="bahmniefms-201708221027" author="Manyama, Ian">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="openerp_debtor_list" />
+            </not>
+        </preConditions>
         <comment>Creating openerp_debtor_list table</comment>
         <sqlFile path="201708211531.sql"/>
     </changeSet>
 
 
     <changeSet id="bahmniefms-201808010935" author="Manyama, Ian">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="nhif_authentication_header" />
+            </not>
+        </preConditions>
         <comment>Creating nhif_authentication_header</comment>
         <sqlFile path="201808010935.sql"/>
+    </changeSet>
+
+    <changeSet id="bahmniefms-201802031407" author="Manyama, Ian">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="openerp_pricelist_mapping" />
+            </not>
+        </preConditions>
+        <comment>Creating openerp_pricelist_mapping</comment>
+        <sqlFile path="201802031407.sql"/>
     </changeSet>
 
 

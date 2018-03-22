@@ -38,7 +38,8 @@ public class UCCModuleConstants {
     public static final int EXPOSED_INFANT_PROGRAM_MINIMUM_AGE = 2;
     public static final int PREGNANT_MINIMUM_AGE = 10;
 
-   public static final String OPENERP_HOST = "197.250.7.213";
+   public static final String OPENERP_HOST = "41.86.162.62";
+   //public static final String OPENERP_HOST = "197.250.7.213";
   // public static final String OPENERP_HOST = "192.168.33.10";
     public static final int OPENERP_PORT = 8069;
     public static final String OPENERP_DB = "openerp";

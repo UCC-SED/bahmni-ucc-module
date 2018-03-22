@@ -19,6 +19,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
 
@@ -231,7 +232,6 @@ public class OpenERPUtils {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        System.out.println(dateBefore30Days + " ");
         XmlRpcClient xmlrpcClient = getXmlRpcClient();
         List criteria = new Vector();
         criteria.add(asList("partner_id", "=", erpCustomerId).toArray());
@@ -306,8 +306,9 @@ public class OpenERPUtils {
         return (Object[]) result;
     }
 
-    public int findCustomers(Integer connectionId, String patientUuid) throws MalformedURLException, XmlRpcException {
+    public int findCustomers(Integer connectionId, String patientUuid, boolean doubleCheck) throws MalformedURLException, XmlRpcException {
         XmlRpcClient xmlrpcClient = getXmlRpcClient();
+
 
         List<Object> criteria = new ArrayList<Object>();
         criteria.add(asList("ref", "=", patientUuid).toArray());
@@ -316,7 +317,22 @@ public class OpenERPUtils {
         );
         Object[] customerId = (Object[]) xmlrpcClient.execute("execute", customerSearchParams.toArray());
 
-        return (int) customerId[0];
+        if(doubleCheck && customerId.length<1)
+        {
+            try {
+                TimeUnit.SECONDS.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+           return  findCustomers( connectionId,  patientUuid, false);
+        }
+
+       if(customerId.length>0) {
+           return (int) customerId[0];
+       }else
+       {
+           return 0;
+       }
 
     }
 
