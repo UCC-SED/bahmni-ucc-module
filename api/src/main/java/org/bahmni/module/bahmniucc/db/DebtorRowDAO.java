@@ -44,6 +44,8 @@ public interface DebtorRowDAO {
 
     List getPatientInDept();
 
+    String updateRoom(String room, String uuid);
+
     int readBillingCategoryIdByName(String categoryName);
 
 

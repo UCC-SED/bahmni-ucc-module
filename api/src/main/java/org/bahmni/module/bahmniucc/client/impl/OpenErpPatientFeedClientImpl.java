@@ -93,7 +93,11 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
         return debtorRowDAO.getPatientInDept();
     }
 
+    @Override
+    public String updateRoom(String room, String patientUuid) {
 
+        return debtorRowDAO.updateRoom(room, patientUuid);
+    }
     @Override
     public ArrayList<NotificationResult> processNotifications(String patientUuid, String visitUuid) {
         ArrayList<NotificationResult> notificationResultsList = new ArrayList<>();

@@ -32,6 +32,8 @@ public interface DebtClient {
 
     List searchTribes(String searchNames);
 
+    String updateRoom(String room, String patientUuid);
+
     List getPatientInDept();
 
     int getBillingCategoryId(String categoryName);
