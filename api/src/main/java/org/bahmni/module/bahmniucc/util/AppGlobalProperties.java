@@ -23,9 +23,21 @@ public class AppGlobalProperties implements GlobalPropertyListener {
 	
 	public static final String GLOBAL_CONSULTATION_AMOUNT = "consultation.amount";
 
+	public static final String GLOBAL_CONSULTATION_INSURANCE_AMOUNT  = "consultation.insurance_amount";
+
+	public static final String GLOBAL_EXTERNAL_LAB_PRODUCT_ID = "external_lab.productId";
+
+	public static final String GLOBAL__EXTERNAL_LAB__AMOUNT = "external_lab.amount";
+
 	public static final String OPENERP_HOST = "openerp.host";
 
 	public static final String OPENERP_PORT = "openerp.port";
+
+	public static final String EXTERNAL_SERVICE = "external_serive_id";
+
+	public static final String EXTERNAL_SERVICE_AMOUNT = "external_service_amount";
+
+	public static final String EXTERNAL_SERVICE_INSURANCE_AMOUNT = "external_service_insurance_amount";
 
 	public static final String CONSULTATION_EXEMPTION_NO_DAYS= "cons.exemption.days";
 	
@@ -41,6 +53,41 @@ public class AppGlobalProperties implements GlobalPropertyListener {
 	public static final String GLOBAL_CONSULTATION_AMOUNT() {
 		String propertyValue = Context.getAdministrationService().getGlobalProperty(GLOBAL_CONSULTATION_AMOUNT);
 		
+		return propertyValue;
+	}
+
+	public static final String EXTERNAL_SERVICE() {
+		String propertyValue = Context.getAdministrationService().getGlobalProperty(EXTERNAL_SERVICE);
+
+		return propertyValue;
+	}
+	public static final String EXTERNAL_SERVICE_AMOUNT() {
+		String propertyValue = Context.getAdministrationService().getGlobalProperty(EXTERNAL_SERVICE_AMOUNT);
+
+		return propertyValue;
+	}
+	public static final String EXTERNAL_SERVICE_INSURANCE_AMOUNT() {
+		String propertyValue = Context.getAdministrationService().getGlobalProperty(EXTERNAL_SERVICE_INSURANCE_AMOUNT);
+
+		return propertyValue;
+	}
+
+	public static final String GLOBAL_CONSULTATION_INSURANCE_AMOUNT() {
+		String propertyValue = Context.getAdministrationService().getGlobalProperty(GLOBAL_CONSULTATION_INSURANCE_AMOUNT);
+
+		return propertyValue;
+	}
+
+
+	public static final String GLOBAL_EXTERNAL_LAB_PRODUCT_ID() {
+		String propertyValue = Context.getAdministrationService().getGlobalProperty(GLOBAL_EXTERNAL_LAB_PRODUCT_ID);
+
+		return propertyValue;
+	}
+
+	public static final String GLOBAL_EXTERNAL_LAB_AMOUNT() {
+		String propertyValue = Context.getAdministrationService().getGlobalProperty(GLOBAL__EXTERNAL_LAB__AMOUNT);
+
 		return propertyValue;
 	}
 

@@ -139,18 +139,32 @@ public class OpenERPUtils {
     }
 
 
-    public String insertSaleOrderLine(int loginID, int orderID) throws MalformedURLException, XmlRpcException {
+    public String insertSaleOrderLine(int loginID, int orderID, String patientCategory) throws MalformedURLException, XmlRpcException {
 
         XmlRpcClient xmlrpcClient = getXmlRpcClient();
 
         HashMap<Object, Object> params = new HashMap<Object, Object>();
+        //IF CONDITION FOR DIFFERENT PRODUCTS
+        if(patientCategory.equalsIgnoreCase("GENERAL OPD")) {
+            params.put("name", "Consultation Fee");
+            params.put("product_id", AppGlobalProperties.GLOBAL_CONSULTATION_PRODUCT_ID());
+            params.put("type", "make_to_stock");
+            params.put("state", "draft");
+            params.put("price_unit", AppGlobalProperties.GLOBAL_CONSULTATION_AMOUNT());
+            params.put("order_id", orderID);
+        }
+         if(patientCategory.equalsIgnoreCase("DIAGNOSTIC PATIENT")){
+            params.put("name", "DIAGNOSTIC SERVICE FEE");
+            params.put("product_id", AppGlobalProperties.GLOBAL_EXTERNAL_LAB_PRODUCT_ID());
+            params.put("type", "make_to_stock");
+            params.put("state", "draft");
+            params.put("price_unit", AppGlobalProperties.GLOBAL_EXTERNAL_LAB_AMOUNT());
+            params.put("order_id", orderID);
 
-        params.put("name", "Consultation Fee");
-        params.put("product_id", AppGlobalProperties.GLOBAL_CONSULTATION_PRODUCT_ID());
-        params.put("type", "make_to_stock");
-        params.put("state", "draft");
-        params.put("price_unit", AppGlobalProperties.GLOBAL_CONSULTATION_AMOUNT());
-        params.put("order_id", orderID);
+        }
+        if(patientCategory.equalsIgnoreCase("CTC PATIENT")){
+        return "true";
+        }
 
         Vector<Object> arg = new Vector<Object>();
 
@@ -177,8 +191,8 @@ public class OpenERPUtils {
         params.put("date_order", dateFormatter());
         params.put("user_id", 1);
         params.put("partner_id", erpCustomerId);
-        params.put("partner_invoice_id", 1);
-        params.put("partner_shipping_id", 1);
+        params.put("partner_invoice_id", erpCustomerId);
+        params.put("partner_shipping_id", erpCustomerId);
         params.put("picking_policy", "direct");
         params.put("order_policy", "manual");
         params.put("pricelist_id", 1);
@@ -231,7 +245,7 @@ public class OpenERPUtils {
         Date dateBefore30Days = cal.getTime();
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        //check last date to get consultation fee
         XmlRpcClient xmlrpcClient = getXmlRpcClient();
         List criteria = new Vector();
         criteria.add(asList("partner_id", "=", erpCustomerId).toArray());

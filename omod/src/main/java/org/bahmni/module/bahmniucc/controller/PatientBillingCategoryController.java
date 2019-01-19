@@ -62,7 +62,7 @@ public class PatientBillingCategoryController {
             logger.info("priceListId " + priceListId);
 
             XmlRpcClient xmlrpcClient = util.getXmlRpcClient();
-            ;
+            
 
             HashMap<Object, Object> params = new HashMap<Object, Object>();
             params.put("property_product_pricelist", priceListId);

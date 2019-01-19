@@ -41,7 +41,7 @@ public class NHIFController {
 
         String authorizationHeader = getAuthenticationHeader(AppGlobalProperties.GLOBAL_NHIF_USERNAME(), AppGlobalProperties.GLOBAL_NHIF_PASSWORD());
 
-        String requestUrl = AppGlobalProperties.GLOBAL_NHIF_BASE_URL() + "verification/AuthorizeCard?CardNo=" + cardNo + "&VisitTypeID=" + visitTypeID + "ReferralNo=" + referralNo;
+        String requestUrl = AppGlobalProperties.GLOBAL_NHIF_BASE_URL() + "verification/AuthorizeCard?CardNo=" + cardNo + "&VisitTypeID=" + visitTypeID + "&ReferralNo=" + referralNo;
 
         HttpGetRequest httpGetRequest = new HttpGetRequest(httpRequest, requestUrl, authorizationHeader, "application/x-www-form-urlencoded;charset=UTF-8");
         String autherizationCardStatusResponse = httpGetRequest.execute();

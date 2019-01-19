@@ -17,10 +17,10 @@ public class DoctorRoomWebController extends BaseRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "DoctorRoom")
     @ResponseBody
-    public String updateRoom(@RequestParam("room") String room, @RequestParam("patientuuid") String patientUuid) throws Exception {
+    public void updateRoom(@RequestParam("room") String room, @RequestParam("patientuuid") String patientUuid) throws Exception {
 
         String update =doctorRoomController.updateRoom(room,patientUuid);
-        return update;
+
     }
 
 }

@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.v1_0.controller.BaseRestController;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,11 +25,15 @@ public class DrugStockStatusController extends BaseRestController {
     @ResponseBody
     public String getDrugStatus(@RequestParam("drugName") String drugName) throws Exception {
 
+     String passedDrugName= drugName.split("\\(")[0];
+
+       String drugNameSearch = passedDrugName.replaceAll("\\s+$", "");
         DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
-        boolean stockStatus =   feedClient.getDrugBalance(drugName);
+        boolean stockStatus =   feedClient.getDrugBalance(drugNameSearch);
 
         JSONObject obj = new JSONObject();
         obj.put("stockStatus", stockStatus);
+        obj.put("drugName", drugNameSearch);
         return obj.toJSONString();
     }
 

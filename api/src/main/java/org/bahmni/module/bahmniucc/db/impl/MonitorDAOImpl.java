@@ -19,7 +19,6 @@ public class MonitorDAOImpl implements MonitorDAO {
 
     private DbSessionFactory sessionFactory;
 
-
     @Override
     public String readQueries(List<String> queries) {
 
@@ -84,7 +83,6 @@ public class MonitorDAOImpl implements MonitorDAO {
         return obj.toJSONString();
 
     }
-
 
     public DbSession getSession() {
         return sessionFactory.getCurrentSession();

@@ -1,8 +1,8 @@
 package org.bahmni.module.bahmniucc.client.impl;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.bahmni.module.bahmniucc.UCCModuleConstants;
 import org.bahmni.module.bahmniucc.client.OpenErpPatientFeedClient;
@@ -15,12 +15,9 @@ import org.bahmni.module.bahmniucc.util.OpenERPUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-
-import static org.bahmni.module.bahmniucc.util.OpenERPUtils.SCHEME;
 
 /**
  * Created by ucc-ian on 22/Aug/2017.
@@ -45,14 +42,17 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
 
         try {
             logger.info("openelisatomfeedclient:processing feed " + DateTime.now());
-            int LoginID = Login();
-            getFeedClient(LoginID);
+            //int LoginID = Login();
+           // getFeedClient(LoginID);
+            saveDebtorRowNew();
         } catch (Exception e) {
 
         }
 
     }
-
+    public void saveDebtorRowNew(){
+       debtorRowDAO.saveDebtorRowNew();
+    }
     @Override
     public void processMonitorData() {
         String monitorItemJson = debtorRowDAO.readQuery();
@@ -63,7 +63,27 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             e.printStackTrace();
         }
     }
+    public int gePriceListID(String paymentType){
 
+      return  debtorRowDAO.gePriceListID( paymentType);
+    }
+
+    @Override
+    public int get_sub_store_id(int userId){
+
+        return debtorRowDAO.get_sub_store_id( userId);
+    }
+
+    @Override
+    public String getDrug_request(String drug_name){
+        return debtorRowDAO.getDrug_request( drug_name);
+    }
+
+    @Override
+    public String createdrug_requestOrder(int item_id,int qty_req,int price_listId,int userId,int sub_store_id){
+
+        return debtorRowDAO.createdrug_requestOrder( item_id, qty_req, price_listId, userId,sub_store_id);
+    }
 
     @Override
     public String readAuthenticationHeader() {
@@ -87,17 +107,151 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
     public List searchTribes(String searchNames) {
         return debtorRowDAO.searchTribes(searchNames);
     }
+    @Override
+    public String updateRoom(String room, String patientUuid) {
+
+        return debtorRowDAO.updateRoom(room, patientUuid);
+    }
+    @Override
+    public String priceList(String name, String defaultPriceList){
+
+
+        return debtorRowDAO.insertPriceList(name,defaultPriceList);
+    }
+    @Override
+    public int get_qty_conceptId(String order_uuid, String type){
+        return debtorRowDAO.get_qty_conceptId( order_uuid,  type);
+    }
+    @Override
+    public int updateStockQty(int conceptId, int qty, int priceList_id){
+
+        return debtorRowDAO.updateStockQty(conceptId, qty,  priceList_id);
+    }
+
+    @Override
+    public List get_dbData(String qry){
+        return debtorRowDAO.get_dbData(qry);
+    }
+
+    @Override
+    public String insertPhysical(String drug_id, double qty, int priceList,String receivedDate,String recorededDate, String batchNo){
+
+
+        return debtorRowDAO.insertPhysical(drug_id,qty,priceList,  receivedDate, recorededDate, batchNo);
+    }
+    @Override
+    public  String reduct_drugQuantity(int qty,int item_id,int pricelistId){
+
+        return debtorRowDAO.reduct_drugQuantity(qty,item_id,pricelistId);
+    }
+
+    @Override
+    public List getDrug(String name){
+
+        return debtorRowDAO.getDrug(name);
+    }
+
+    @Override
+    public String insertledger(String item_name, String LedgerEntryType, Double quantity, String BatchNo,
+                               String InvoiceNo, String ExpiryDate, String receiveDate ,String price_list_id, float amount,String mathz){
+
+        return debtorRowDAO.insertledger(item_name,LedgerEntryType,quantity,BatchNo,InvoiceNo,ExpiryDate,receiveDate,price_list_id,amount, mathz);
+
+    }
+
+    @Override
+    public String insertPrice(String drugID, float amount, int pricelistID,float buying){
+        return debtorRowDAO.insertPrice(drugID,amount,pricelistID,buying);
+    }
+
+    @Override
+    public List selectPrice(String name){
+
+     return  debtorRowDAO.selectPrice(name);
+    }
+    @Override
+    public String createItem(String name, String category, String strength, String dosageForm ){
+    return debtorRowDAO.createItem(name,category,strength,dosageForm);
+    }
+    @Override
+    public List selectPriceLists(){
+        return debtorRowDAO.selectPriceLists();
+    }
+    @Override
+    public List getAddItems(String name){
+    return debtorRowDAO.getAddItems(name);
+    }
+    @Override
+    public List getSalesOrders(String search){
+    return debtorRowDAO.getSalesOrders(search);
+    }
+    @Override
+    public List getDiscountOrders(String search){
+        return debtorRowDAO.getDiscountOrders(search);
+    }
+    public String cancelOrder(String orderID){
+        return debtorRowDAO.cancelOrder(orderID);
+    }
+    @Override
+    public  String cancelOrderLine(String orderlineID){
+        return debtorRowDAO.cancelOrderLine(orderlineID);
+
+    }
+    @Override
+    public String saveDiscount(float dicountAmount,int item,int paid, String orderID){
+        return debtorRowDAO.saveDiscount( dicountAmount, item, paid, orderID);
+    }
+
+    @Override
+    public String paymentConfirmed(String orderID){
+
+        return debtorRowDAO.paymentConfirmed(orderID);
+    }
+    @Override
+    public List getPaidorders(String search){
+
+        return debtorRowDAO.getPaidorders(search);
+    }
+    @Override
+    public List getSalesOrders_line(String orderID){
+    return debtorRowDAO.getSalesOrders_line(orderID);
+    }
+
+    @Override
+    public  List getSalesOrders_line_other(String orderID){
+       return debtorRowDAO.getSalesOrders_line_other(orderID);
+    }
+
+    @Override
+    public List selectPhysical(String name,String byDate,String byBatch){
+
+        return debtorRowDAO.selectPhysical(name,byDate,byBatch);
+    }
+    @Override
+    public List selectLedger_entry(String name,String batchNo, String invID){
+        return debtorRowDAO.selectLedger_entry(name,batchNo,invID);
+    }
+    @Override
+   public List getCancelledorders(String search){
+        return debtorRowDAO.getCancelledorders(search);
+    }
+
+    @Override
+    public String  updateStatus(int drug_id, int status,int concept_id){
+        return debtorRowDAO.updateStatus(drug_id,status,concept_id);
+    }
+
+    @Override
+    public String billItems(String orderID){
+        return debtorRowDAO.billItems(orderID);
+    }
 
     @Override
     public List getPatientInDept() {
         return debtorRowDAO.getPatientInDept();
     }
 
-    @Override
-    public String updateRoom(String room, String patientUuid) {
 
-        return debtorRowDAO.updateRoom(room, patientUuid);
-    }
     @Override
     public ArrayList<NotificationResult> processNotifications(String patientUuid, String visitUuid) {
         ArrayList<NotificationResult> notificationResultsList = new ArrayList<>();
@@ -110,6 +264,10 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
         }
         return notificationResultsList;
     }
+    @Override
+    public String processCtrlNumber(String BillId, String PayCntrNum){
+        return debtorRowDAO.processCtrlNumber( BillId,  PayCntrNum);
+    }
 
     @Override
     public void saveHackTagData(String visitType) {
@@ -117,10 +275,57 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
         debtorRowDAO.insertHack(visitType);
 
     }
+    @Override
+    public List getItems_unfiltered(String name){
+
+        return debtorRowDAO.getItems_unfiltered(name);
+    }
 
     @Override
     public int getBillingCategoryId(String categoryName) {
        return  debtorRowDAO.readBillingCategoryIdByName(categoryName);
+    }
+
+    @Override
+    public  String getSaleOrderId(String patientIdentifier, String type) {
+        return  debtorRowDAO.getSaleOrderId(patientIdentifier,type);
+    }
+    @Override
+    public boolean checkIfCustomerConsultationExemption(String patientIdentifier, int dated){
+
+        return  debtorRowDAO.checkIfCustomerConsultationExemption(patientIdentifier,dated);
+    }
+
+    @Override
+    public String createorder_line(String order_id,int item_id, String item_type, int qty, float amount, int patient_id, int visit_id, int payment_category )
+    {
+        return  debtorRowDAO.createorder_line(order_id, item_id,  item_type,  qty,  amount,  patient_id,  visit_id,  payment_category);
+    }
+
+    @Override
+    public String process_control_number(String bill_id, String status, String control_number, String transaction_code) {
+        return  debtorRowDAO.add_control_number(bill_id,control_number,status,transaction_code);
+    }
+
+    @Override
+    public String post_payment(String transaction_id,String bill_id, String control_number, String bill_amount, String paid_amount, String phone_number) {
+        return  debtorRowDAO.post_payment(transaction_id,bill_id,control_number,bill_amount,paid_amount,phone_number);
+    }
+
+    @Override
+    public String update_drug_orderlinie(String order_id,int item_id,  int qty,  int patientId ){
+        return  debtorRowDAO.update_drug_orderlinie(order_id, item_id,   qty, patientId);
+
+    }
+
+
+    @Override
+    public int getPatientID(String patientIdentifier,String type){
+        return  debtorRowDAO.getPatientID(patientIdentifier,type);
+    }
+    @Override
+    public int get_location_id(String locationUuid){
+        return  debtorRowDAO.get_location_id(locationUuid);
     }
 
     @Override
@@ -130,16 +335,33 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
     }
 
     @Override
+    public boolean check_if_orderlineExist(String patientIdentifier, String item_uuid,String type){
+
+        return debtorRowDAO.check_if_orderlineExist( patientIdentifier,  item_uuid,type);
+    }
+    @Override
+    public int getDrugItem_id(String itemUuid){
+        return debtorRowDAO.getDrugItem_id(itemUuid);
+    }
+    @Override
+    public float getItem_amount(int itemId, int priceListId){
+
+        return debtorRowDAO.getItem_amount(itemId,priceListId);
+    }
+    @Override
+    public int getItem_id(String itemUuid){
+
+        return debtorRowDAO.getItem_id(itemUuid);
+    }
+    @Override
     public boolean getDrugBalance(String drugName) {
 
-        try {
-            logger.info("openelisatomfeedclient:processing feed " + DateTime.now());
-            int LoginID = Login();
-            logger.info("LoginID" + LoginID);
-            return getStockAvaibilityStatusNew(LoginID, drugName);
-        } catch (Exception e) {
-            return false;
-        }
+        return debtorRowDAO.getDrugBalance(drugName);
+    }
+    @Override
+    public List get_thresholdDrugs(){
+
+        return debtorRowDAO.get_thresholdDrugs();
     }
 
     public void getFeedClient(int LoginID) {
@@ -157,13 +379,13 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             args2[0] = subargs;
 
             Object[] params = new Object[]{UCCModuleConstants.OPENERP_DB, LoginID, UCCModuleConstants.OPENERP_PASSWORD, UCCModuleConstants.OPENERP_ORDER_MODEL, UCCModuleConstants.OPENERP_SEARCH_FUNCTION, args2};
-            Object result = (Object[]) xmlrpcClient.execute("execute", params);
+            Object result = xmlrpcClient.execute("execute", params);
 
             Object[] searchQuery = new Object[]{};
             Vector readqueryVector = new Vector();
             readqueryVector.addElement(searchQuery);
             Object[] read = new Object[]{UCCModuleConstants.OPENERP_DB, LoginID, UCCModuleConstants.OPENERP_PASSWORD, UCCModuleConstants.OPENERP_ORDER_MODEL, UCCModuleConstants.OPENERP_READ_FUNCTION, result, searchQuery};
-            Object resultread = (Object[]) xmlrpcClient.execute("execute", read);
+            Object resultread =  xmlrpcClient.execute("execute", read);
 
             Object[] a = (Object[]) resultread;
 
@@ -280,7 +502,7 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             Object[] params = new Object[]{UCCModuleConstants.OPENERP_DB, LoginID,
                     UCCModuleConstants.OPENERP_PASSWORD, "product.product",
                     UCCModuleConstants.OPENERP_SEARCH_FUNCTION, args2};
-            Object result = (Object[]) xmlrpcClient.execute("execute", params);
+            Object result = xmlrpcClient.execute("execute", params);
 
             logger.info("result value " + ((Object[]) result)[0]);
 
@@ -302,7 +524,7 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
 
             args[0] = subarg;
             args[1] = subargs2;
-            // args[2] = subargs3;
+            args[2] = subargs3;
 
             Object[] searchQuery = new Object[]{};
             Vector readqueryVector = new Vector();
@@ -311,7 +533,7 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
                     UCCModuleConstants.OPENERP_PASSWORD, "stock.move",
                     UCCModuleConstants.OPENERP_SEARCH_FUNCTION, args2};
 
-            Object resultread = (Object[]) xmlrpcClient.execute("execute", read);
+            Object resultread = xmlrpcClient.execute("execute", read);
 
             logger.info("result string " + resultread.toString());
             Object[] a = (Object[]) resultread;
@@ -357,7 +579,7 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             Object[] params = new Object[]{UCCModuleConstants.OPENERP_DB, LoginID,
                     UCCModuleConstants.OPENERP_PASSWORD, "product.product",
                     UCCModuleConstants.OPENERP_SEARCH_FUNCTION, args2};
-            Object productResult = (Object[]) xmlrpcClient.execute("execute", params);
+            Object productResult = xmlrpcClient.execute("execute", params);
 
             logger.info("productResult value " + ((Object[]) productResult)[0]);
 
@@ -369,7 +591,7 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
             product_id[2] = drugName;
 
             Object[] qty_available = new Object[3];
-            qty_available[0] = "qty_available";
+            qty_available[0] = "stock_available";
             qty_available[1] = ">";
             qty_available[2] = 0;
 
@@ -379,10 +601,10 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
 
 
             Object[] read = new Object[]{UCCModuleConstants.OPENERP_DB, LoginID,
-                    UCCModuleConstants.OPENERP_PASSWORD, "product.product",
+                    UCCModuleConstants.OPENERP_PASSWORD, "stock.move",
                     UCCModuleConstants.OPENERP_READ_FUNCTION, stockQuantity};
 
-            Object resultread = (Object[]) xmlrpcClient.execute("execute", read);
+            Object resultread = xmlrpcClient.execute("execute", read);
 
             logger.info("result string " + resultread.toString());
             Object[] a = (Object[]) resultread;
@@ -406,6 +628,124 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
 
         }
 
+    }
+
+    @Override
+    public String get_reconciliation_data(String bill_id){
+        return debtorRowDAO.get_reconciliation_data(bill_id);
+    }
+
+    @Override
+    public String check_amount(String bill_id){
+        return debtorRowDAO.check_amount(bill_id);
+    }
+
+    @Override
+    public String check_control_number(String control_number){
+        return debtorRowDAO.check_control_number(control_number);
+    }
+
+    @Override
+    public String check_bill_id(String bill_id){
+        return debtorRowDAO.check_bill_id(bill_id);
+    }
+
+    @Override
+    public String add_reconciliation_response(String reconciliation_id,String bill_id,String transaction_id, String control_number, float amount, String payer_reference_id, String transaction_date,String account_number, String remarks ){
+        return debtorRowDAO.add_reconciliation_response(reconciliation_id,bill_id,transaction_id, control_number,amount,payer_reference_id,transaction_date,account_number,remarks);
+    }
+
+    @Override
+    public String add_gep_response(String response_id,String message, String response_type){
+        return debtorRowDAO.add_gep_response(response_id,message,response_type);
+    }
+
+    @Override
+    public String add_cancel_status(String bill_id,String status){
+        return debtorRowDAO.add_cancel_status(bill_id,status);
+    }
+
+    @Override
+    public List get_information(String keyword){
+        return debtorRowDAO.get_information(keyword);
+    }
+
+    //========================================DEC 2018 =====================================================
+
+    @Override
+    public String editItem(int concept_name_id,int item_drug_id,String itemId, String name, String strength, String dosageForm,String dateCreated) {
+        return debtorRowDAO.editItem(concept_name_id,item_drug_id,itemId,name,strength,dosageForm,dateCreated);
+    }
+    @Override
+    public String editPrice(int item_price_id,String drugID, float amount, int pricelistID,String dateRecorded,float buying_price) {
+        return debtorRowDAO.editPrice(item_price_id,drugID,amount,pricelistID,dateRecorded,buying_price);
+    }
+
+
+    @Override
+    public  String editPhysical(int physical_inventory_id,String drug_id, double qty, int priceList, String receivedDate, String recorededDate, String batchNo) {
+        return debtorRowDAO.editPhysical(physical_inventory_id,drug_id,qty,priceList,receivedDate,recorededDate,batchNo);
+    }
+
+    @Override
+    public String updateLedger(String item_name, String LedgerEntryType, Double quantity, String BatchNo,String InvoiceNo, String ExpiryDate, String receiveDate, String price_list_id, float amount, String mathz,int ledger_entry_id){
+        return debtorRowDAO.updateLedger(item_name,LedgerEntryType,quantity,BatchNo,InvoiceNo,ExpiryDate,receiveDate,price_list_id,amount,mathz,ledger_entry_id);
+    }
+
+    @Override
+    public List getLedger_entry(){
+        return debtorRowDAO.getLedger_entry();
+    }
+
+    @Override
+    public List get_total_physical(){
+        return debtorRowDAO.get_total_physical();
+    }
+
+    @Override
+    public List get_physical_value(){
+        return debtorRowDAO.get_physical_value();
+    }
+
+    @Override
+    public List get_stock_value(){
+        return debtorRowDAO.get_stock_value();
+    }
+
+    @Override
+    public List get_total_stock(){
+        return debtorRowDAO.get_total_stock();
+    }
+
+
+    @Override
+    public List selectAllPhysical() {
+        return debtorRowDAO.selectAllPhysical();
+    }
+
+    @Override
+    public List getPriceList() {
+        return debtorRowDAO.getPriceList();
+    }
+
+    @Override
+    public List get_expiry_stock() {
+        return debtorRowDAO.get_expiry_stock();
+    }
+
+    @Override
+    public List get_expire_value() {
+        return debtorRowDAO.get_expire_value();
+    }
+
+    @Override
+    public List get_all_ledger() {
+        return debtorRowDAO.get_all_ledger();
+    }
+
+    @Override
+    public List getItems() {
+        return debtorRowDAO.getItems();
     }
 
 }

@@ -9,19 +9,12 @@ package org.bahmni.module.bahmniucc.api;
  * @author ucc-ian
  */
 
-import java.net.MalformedURLException;
-
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.XmlRpcException;
-import org.bahmni.module.bahmniucc.client.DebtClient;
-import org.bahmni.module.bahmniucc.client.OpenErpPatientFeedClient;
 import org.bahmni.module.bahmniucc.controller.PatientBillingCategoryController;
 import org.bahmni.module.bahmniucc.util.OpenERPUtils;
 import org.json.simple.JSONObject;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.v1_0.controller.BaseRestController;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,8 +35,7 @@ public class ConsultationFeeController extends BaseRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "createConsultationQuotation")
     @ResponseBody
-    public String getDrugStatus(@RequestParam("patientIdentifier") String patientIdentifier, @RequestParam("paymentCategoryName") String paymentCategoryName) throws Exception {
-
+    public String createConsultationQuotation(@RequestParam("patientIdentifier") String patientIdentifier, @RequestParam("paymentCategoryName") String paymentCategoryName, @RequestParam("patientCategory") String patientCategory) throws Exception {
 
         if(updateSingleDeliveryOrder( patientIdentifier,  paymentCategoryName)) {
             Object loginID = util.login();
@@ -58,7 +50,7 @@ public class ConsultationFeeController extends BaseRestController {
 
             if (util.checkIfCustomerConsultationExemption((int) loginID, customerid)) {
                 int findSaleOrderIdsForCustomer = util.findSaleOrderIdsForCustomer((int) loginID, customerid);
-                String orderId = util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer);
+                String orderId = util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer,patientCategory);
 
                 JSONObject obj = new JSONObject();
                 obj.put("orderId", orderId);
@@ -83,7 +75,6 @@ public class ConsultationFeeController extends BaseRestController {
 
     public boolean updateSingleDeliveryOrder(String patientIdentifier, String paymentCategoryName) throws Exception {
 
-
         logger.info("patientIdentifier " + patientIdentifier);
         logger.info("paymentCategoryName " + paymentCategoryName);
 
@@ -91,7 +82,6 @@ public class ConsultationFeeController extends BaseRestController {
         int customerid = util.findCustomers((int) loginID, patientIdentifier, true);
 
         boolean updateStatus = billingCategoryController.updateBillingCategory(paymentCategoryName, patientIdentifier, customerid, (int) loginID);
-
         return updateStatus;
     }
 

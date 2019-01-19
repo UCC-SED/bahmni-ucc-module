@@ -19,7 +19,7 @@ public class PatientDeptController {
     }
 
     public String getPatientIds(){
-        logger.info("Get patient IDs");
+        logger.info("Get patient identifiers");
         DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
         List patientInDeptId = feedClient.getPatientInDept();
         String patientIds = new Gson().toJson(patientInDeptId);

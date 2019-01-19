@@ -42,7 +42,7 @@ public class PatientConsultationFeeOrder implements UCCValidationRules {
 
             logger.info("Sale Order " + findSaleOrderIdsForCustomer);
 
-            util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer);
+            util.insertSaleOrderLine((int) loginID, findSaleOrderIdsForCustomer,"GENERAL OPD");
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
