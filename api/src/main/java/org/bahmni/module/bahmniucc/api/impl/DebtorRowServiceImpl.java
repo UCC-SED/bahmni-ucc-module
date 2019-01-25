@@ -237,5 +237,27 @@ public class DebtorRowServiceImpl  extends BaseOpenmrsService implements DebtorR
     public List get_all_ledger() {
         return debtorRowDAO.get_all_ledger();
     }
-
+/*
+ * EDIT & UPDATE DISPATCH PRODUCT MOVEMENT 
+ * 
+ */
+    
+    @Override
+    @Transactional(readOnly = false)
+    public String EditProductMovement(int id,int person_id_sub_store, int prod_mv_id, int item_id, String date_qty_requested,int quantity_requested, int quantity_given, String date_qty_given, int person_id_main_store, int sub_store_id, int product_batch_no, String product_mvnt_status, int price_list_id  ) {
+    	 
+    	return debtorRowDAO.EditProductMovement(id,person_id_sub_store,prod_mv_id,item_id, date_qty_requested,quantity_requested,quantity_given,date_qty_given,person_id_main_store,sub_store_id,product_batch_no,product_mvnt_status,price_list_id );
+    }
+    
+    @Override
+    @Transactional(readOnly = false)
+    public String updateDispatch_Batch(int person_id_sub_store, String product_mvnt_status) {
+    	return debtorRowDAO.updateDispatch_Batch(person_id_sub_store,product_mvnt_status);
+    }
+    
+    @Override
+    @Transactional(readOnly = false)
+    public String updateDispatch_Row( int id, String product_mvnt_status) {
+    	return debtorRowDAO.updateDispatch_Row(id,product_mvnt_status);
+    }
 }

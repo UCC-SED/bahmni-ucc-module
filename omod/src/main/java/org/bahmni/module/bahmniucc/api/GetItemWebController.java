@@ -1,5 +1,4 @@
 package org.bahmni.module.bahmniucc.api;
-
 import com.google.gson.Gson;
 import org.bahmni.module.bahmniucc.client.DebtClient;
 import org.bahmni.module.bahmniucc.client.OpenErpPatientFeedClient;
@@ -33,7 +32,8 @@ public class GetItemWebController {
     @RequestMapping(method = RequestMethod.GET, value = "createdrug_requestOrder")
     @ResponseBody
     public String createItem(@RequestParam("item_id") int item_id,
-                             @RequestParam("qty_req") int qty_req, @RequestParam("price_listId") int price_listId,
+                             @RequestParam("qty_req") int qty_req,
+                             @RequestParam("price_listId") int price_listId,
                              @RequestParam("userId") int userId )
             throws Exception {
 
@@ -108,5 +108,35 @@ public class GetItemWebController {
         return feedClient.get_sub_store_id(userId);
 
     }
+    
+    // EDIT FUNCTIONS 
+    @RequestMapping(method = RequestMethod.GET, value = "editProductMovement")
+    @ResponseBody
+    public String EditProductMovement(@RequestParam("id") int id, @RequestParam("personIdsubStore") int personIdsubStore,@RequestParam("prodmvId") int prodmvId,@RequestParam("itemId") int itemId, @RequestParam("dateQtyRequested") String dateQtyRequested, @RequestParam("quantityRequested") int quantityRequested,@RequestParam("quantityGiven") int quantityGiven,@RequestParam("dateQtyGiven") String dateQtyGiven, @RequestParam("personIdMainStore") int personIdMainStore, @RequestParam("subStoreId") int subStoreId, @RequestParam("productBatchNo") int productBatchNo, @RequestParam("productMvntStatus") String productMvntStatus,@RequestParam("priceListId") int priceListId)
+throws Exception {
+
+DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+return new Gson().toJson(feedClient.EditProductMovement(id,personIdsubStore,prodmvId,itemId,dateQtyRequested,quantityRequested,quantityGiven,dateQtyGiven,personIdMainStore,subStoreId,productBatchNo,productMvntStatus,priceListId));
+}
+    
+    // UPDATE DISPATCH BATCH
+    @RequestMapping(method = RequestMethod.GET, value = "updateDispatchBatch")
+    @ResponseBody
+    public String updateDispatch_Batch(@RequestParam("personIdsubStore") int personIdsubStore,@RequestParam("productMvtStatus")String productMvtStatus)
+throws Exception {
+
+DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+return new Gson().toJson(feedClient.updateDispatch_Batch(personIdsubStore,productMvtStatus));
+}
+    
+    //UPDATE DISPATCH ROW
+    @RequestMapping(method = RequestMethod.GET, value = "updateDispatch_Row")
+    @ResponseBody
+    public String updateDispatch_Row(@RequestParam("id") int id,@RequestParam("productMvtStatus")String productMvtStatus)
+throws Exception {
+
+DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+return new Gson().toJson(feedClient.updateDispatch_Row(id,productMvtStatus));
+}
 
 }

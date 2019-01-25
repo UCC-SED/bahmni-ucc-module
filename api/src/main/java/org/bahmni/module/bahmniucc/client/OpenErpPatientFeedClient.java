@@ -41,4 +41,14 @@ public interface OpenErpPatientFeedClient extends DebtClient{
     List get_expire_value();
     List get_all_ledger();
     List getItems();
+    
+    /**  
+    .............EDIT PRODUCT MOVENTMENT
+    */
+    
+   String updateDispatch_Batch(int person_id_sub_store, String product_mvnt_status);
+   String updateDispatch_Row( int id, String product_mvnt_status);
+   String EditProductMovement(int id,int person_id_sub_store, int prod_mv_id, int item_id, String date_qty_requested,
+   int quantity_requested, int quantity_given, String date_qty_given, int person_id_main_store, int sub_store_id, int product_batch_no, 
+   String product_mvnt_status, int price_list_id  );
 }

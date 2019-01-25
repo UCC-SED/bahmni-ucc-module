@@ -20,7 +20,7 @@ public class Wh_price_listWebController {
 
     @RequestMapping(method = RequestMethod.GET, value = "insertPriceList")
     @ResponseBody
-    public String insertPriceList(@RequestParam("name") String name,@RequestParam("defaulted") String defaultPriceList) throws Exception {
+    public String insertPriceList(@RequestParam("name") String name, @RequestParam("defaulted") String defaultPriceList) throws Exception {
         DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
 
         return new Gson().toJson(feedClient.priceList(name,defaultPriceList));

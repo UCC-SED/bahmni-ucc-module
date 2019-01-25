@@ -2092,6 +2092,54 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
         }
 
     }
+    //============================UPDATE PRODUCT MOVEMENT (edit) ==========================================
+    
+    @Override
+    public String EditProductMovement(int id,int person_id_sub_store, int prod_mv_id, int item_id, String date_qty_requested,int quantity_requested, int quantity_given, String date_qty_given, int person_id_main_store, int sub_store_id, int product_batch_no, String product_mvnt_status, int price_list_id ) {
+        DbSession session = getSession();
+
+        String sql_edit = "UPDATE wh_product_movement SET person_id_sub_store='" +person_id_sub_store + "',prod_mv_id = " + prod_mv_id + ",item_id = '"
+        +item_id + "',date_qty_requested='"+date_qty_requested+"',quantity_requested = '"+quantity_requested+"',quantity_given='"
+        		+quantity_given+"',date_qty_given='"+date_qty_given+"',person_id_main_store ='"+person_id_main_store+"',sub_store_id='"+
+        sub_store_id+"', product_batch_no='"+product_batch_no+"',product_mvnt_status='"+product_mvnt_status+"',price_list_id='"+price_list_id+"' WHERE id='"+id+ "'";
+        logger.info("sql product movement " + sql_edit);
+        int res = getSession().createSQLQuery(sql_edit).executeUpdate();
+        logger.info("update Product movement: " + res);
+        session.beginTransaction().commit();
+        return "updated";
+    }
+    
+    
+//=============================UPDATE PRODUCT MOVEMENT (dispatch batch) ============================================
+    
+    @Override
+    public String updateDispatch_Batch(int person_id_sub_store, String product_mvnt_status) {
+        DbSession session = getSession();
+
+        String sqlDispatch = "UPDATE wh_product_movement SET product_mvnt_status='"+product_mvnt_status+"'"
+        		+ " WHERE person_id_sub_store='"+person_id_sub_store+ "'";
+        logger.info("sql product movement batch updated" + sqlDispatch);
+        int res = getSession().createSQLQuery(sqlDispatch).executeUpdate();
+        logger.info("update Product movement batch dispatched: " + res);
+        session.beginTransaction().commit();
+        return "updated";
+    }
+    
+//==============================UPDATE PRODUCT MOVEMENT (dispatch row) ====================================================
+    
+    @Override
+    public String updateDispatch_Row( int id, String product_mvnt_status) {
+        DbSession session = getSession();
+
+        String sqlDispatch = "UPDATE wh_product_movement SET product_mvnt_status='"+product_mvnt_status+"'"
+        		+ " WHERE id='"+id+ "'";
+        logger.info("sql product movement dispatched" + sqlDispatch);
+        int res = getSession().createSQLQuery(sqlDispatch).executeUpdate();
+        logger.info("update Product movement row dispatched: " + res);
+        session.beginTransaction().commit();
+        return "updated";
+    }
+
 
     //================================= GET ALL THE DRUG ITEM ===============================================
     @Override
