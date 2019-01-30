@@ -257,7 +257,32 @@ public class DebtorRowServiceImpl  extends BaseOpenmrsService implements DebtorR
     
     @Override
     @Transactional(readOnly = false)
-    public String updateDispatch_Row( int id, String product_mvnt_status) {
-    	return debtorRowDAO.updateDispatch_Row(id,product_mvnt_status);
+    public String updateDispatch_Row( int id, String product_mvnt_status) {return debtorRowDAO.updateDispatch_Row(id,product_mvnt_status);
     }
+
+    /*
+       Location Mapping
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public String createLocation( int personID, int locationID) {return debtorRowDAO.createLocation(personID,locationID);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public String editLocation( int id, int personID, int locationID) {return debtorRowDAO.editLocation(id,personID,locationID);
+    }
+
+    @Override
+    public List getLocation_List() {
+        return debtorRowDAO.getLocation_List();
+    }
+
+    // get userID list
+    @Override
+    public List userID_List(String fullname) {
+        return debtorRowDAO.userID_List(fullname);
+    }
+
+
 }

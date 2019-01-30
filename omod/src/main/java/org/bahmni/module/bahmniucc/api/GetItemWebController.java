@@ -139,4 +139,39 @@ DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
 return new Gson().toJson(feedClient.updateDispatch_Row(id,productMvtStatus));
 }
 
+   // create location mapping
+   @RequestMapping(method = RequestMethod.GET, value = "createLocation")
+   @ResponseBody
+   public String createLocation(@RequestParam("personID") int personID,@RequestParam("locationID")int locationID)
+           throws Exception {
+
+       DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+       return new Gson().toJson(feedClient.createLocation(personID,locationID));
+   }
+   // edit location mapping
+   @RequestMapping(method = RequestMethod.GET, value = "editLocation")
+   @ResponseBody
+   public String editLocation(@RequestParam("id")int id,@RequestParam("personID") int personID,@RequestParam("locationID")int locationID)
+           throws Exception {
+
+       DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+       return new Gson().toJson(feedClient.editLocation(id,personID,locationID));
+   }
+   // Selecting Data (Location mapping)
+
+    @RequestMapping(method = RequestMethod.GET, value = "location_mapping")
+    @ResponseBody
+    public String getLocation_list() throws Exception {
+        DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+
+        return new Gson().toJson( feedClient.getLocation_List());
+    }
+  // Selecting user ID
+  @RequestMapping(method = RequestMethod.GET, value = "userID")
+  @ResponseBody
+  public String userID_List(@RequestParam("fullname")String fullname) throws Exception {
+      DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+
+      return new Gson().toJson( feedClient.userID_List(fullname));
+  }
 }

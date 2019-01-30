@@ -51,4 +51,16 @@ public interface OpenErpPatientFeedClient extends DebtClient{
    String EditProductMovement(int id,int person_id_sub_store, int prod_mv_id, int item_id, String date_qty_requested,
    int quantity_requested, int quantity_given, String date_qty_given, int person_id_main_store, int sub_store_id, int product_batch_no, 
    String product_mvnt_status, int price_list_id  );
+
+
+   /*
+   .......................LOCATION MAPPPING.....................
+    */
+   String createLocation(int personID, int locationID );
+   String editLocation( int id, int personID, int locationID);
+   List getLocation_List();
+
+    //userID list
+    List userID_List(String fullname);
+
 }

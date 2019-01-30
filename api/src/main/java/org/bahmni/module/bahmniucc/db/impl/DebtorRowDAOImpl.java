@@ -216,13 +216,14 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
     {
         String bysearch= null;
         if(drug_name !="") {
-            bysearch = "where drugs.name like  '%"+drug_name+"%' ";
+            bysearch = "where drug" +
+                    ".name like  '%"+drug_name+"%' ";
         }
         else
             bysearch="";
 
         String sql = "select person_id_sub_store,item_id,date_qty_requested,quantity_requested," +
-                "sub_store_id,product_mvnt_status,price_list_id from wh_product_movement,person_name,drugs  "+bysearch+" order by date_qty_requested desc limit 50";
+                "sub_store_id,product_mvnt_status,price_list_id from wh_product_movement,person_name,drug  "+bysearch+" order by date_qty_requested desc limit 50";
         org.hibernate.Query query = this.getSession().createSQLQuery(sql)
                 .setResultTransformer(Transformers.aliasToBean(getPaid_canceledOrders.class));
 
@@ -256,7 +257,7 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
 
     @Override
     public int get_sub_store_id(int userId){
-        String sql = "select location_id as sub_store_id from wh_person_location_map  where  person_id = '"+ userId +"')";
+        String sql = "select location_id as sub_store_id from wh_person_location_map  where  person_id = '"+ userId +"'";
         org.hibernate.Query query = this.getSession().createSQLQuery(sql)
                 .setResultTransformer(Transformers.aliasToBean(Get_sub_store_id.class));
 
@@ -2163,6 +2164,50 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
 
     }
 
+    //=======================Location Mapping===================
+
+    @Override
+    public String createLocation(int personID, int locationId ){
+        DbSession session = getSession();
+        String sql = "INSERT INTO wh_person_location_map (person_id,location_id,date_recorded)VALUES('"+personID+"','"+locationId+"',now())";
+        logger.info("Insert wh_person_location_map" + sql);
+        int res = getSession().createSQLQuery(sql).executeUpdate();
+        logger.info("insert into wh_person_location_map: " + res);
+        session.beginTransaction().commit();
+        return "inserted";
+    }
+    @Override
+    public String editLocation( int id, int personId, int locationID) {
+        DbSession session = getSession();
+        String sql = "UPDATE wh_person_location_map SET person_id='"+personId+"',location_id='"+locationID+"' WHERE id='"+id+ "'";
+        logger.info("sql wh_person_location_map " + sql);
+        int res = getSession().createSQLQuery(sql).executeUpdate();
+        logger.info("update Product movement row dispatched: " + res);
+        session.beginTransaction().commit();
+        return "updated";
+    }
+
+
+    @Override
+    public List getLocation_List() {
+        String sql = "SELECT * FROM wh_person_location_map ORDER BY date_recorded DESC LIMIT 100";
+        org.hibernate.Query query = this.getSession().createSQLQuery(sql)
+        .setResultTransformer(Transformers.aliasToBean(LocationList.class));
+
+        List results = query.list();
+
+        if (results.size() > 0) {
+            return results;
+
+        } else {
+
+            logger.info("no data");
+            return null;
+        }
+
+    }
+
+    //=======================Location Mapping===================
 
     @Override
     public void clearHack() {
@@ -2195,5 +2240,30 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
         return connection;
 
     }
+
+    //================================= GET ALL THE USER ID ===============================================
+    @Override
+    public List userID_List(String fullname) {
+      //  if (fullname != "") {
+            String sql = "SELECT person_id as id, CONCAT(given_name,' ',middle_name,' ',family_name)as fullname from person_name WHERE CONCAT(given_name,' ',middle_name,' ',family_name) LIKE '%" + fullname + "%'";
+            org.hibernate.Query query = this.getSession().createSQLQuery(sql)
+                    .setResultTransformer(Transformers.aliasToBean(UserID.class));
+
+            logger.info("person_name sql: " + sql);
+
+            List results = query.list();
+
+            if (results.size() > 0) {
+                return results;
+
+            } else {
+
+                logger.info("no person_name");
+                return null;
+            }
+
+
+    }
+
 
 }
