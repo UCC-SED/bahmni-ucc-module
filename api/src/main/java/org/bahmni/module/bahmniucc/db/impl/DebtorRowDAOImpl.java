@@ -2245,7 +2245,7 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
     @Override
     public List userID_List(String fullname) {
       //  if (fullname != "") {
-            String sql = "SELECT person_id as id, CONCAT(given_name,' ',middle_name,' ',family_name)as fullname from person_name WHERE CONCAT(given_name,' ',middle_name,' ',family_name) LIKE '%" + fullname + "%'";
+            String sql = "SELECT person_name.person_id as id, CONCAT(person_name.given_name,' ',person_name.middle_name,' ',person_name.family_name)as fullname from person_name,users WHERE users.person_id=person_name.person_id AND CONCAT(person_name.given_name,' ',person_name.middle_name,' ',person_name.family_name) LIKE '%" + fullname + "%'";
             org.hibernate.Query query = this.getSession().createSQLQuery(sql)
                     .setResultTransformer(Transformers.aliasToBean(UserID.class));
 
