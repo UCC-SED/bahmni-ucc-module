@@ -174,4 +174,12 @@ return new Gson().toJson(feedClient.updateDispatch_Row(id,productMvtStatus));
 
       return new Gson().toJson( feedClient.userID_List(fullname));
   }
+    // Selecting user ID
+    @RequestMapping(method = RequestMethod.GET, value = "location_tag")
+    @ResponseBody
+    public String Location_Tag_List(@RequestParam("locatin_name")String Location_name) throws Exception {
+        DebtClient feedClient = Context.getService(OpenErpPatientFeedClient.class);
+
+        return new Gson().toJson( feedClient.Location_Tag_List(Location_name));
+    }
 }

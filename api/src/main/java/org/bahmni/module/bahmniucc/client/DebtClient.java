@@ -187,5 +187,8 @@ public interface DebtClient {
     // User Id and Username
 
     List userID_List(String fullname);
+
+    //location Tag
+    List Location_Tag_List(String Location_name);
 }
 

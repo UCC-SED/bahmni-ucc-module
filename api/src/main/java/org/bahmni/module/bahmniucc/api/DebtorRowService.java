@@ -102,4 +102,7 @@ public interface DebtorRowService extends OpenmrsService {
 	//userID list
 	List userID_List(String fullname);
 
+	//location Tag
+	List Location_Tag_List(String Location_name);
+
 }

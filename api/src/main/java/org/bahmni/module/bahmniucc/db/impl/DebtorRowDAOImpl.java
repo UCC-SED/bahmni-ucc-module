@@ -2264,6 +2264,27 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
 
 
     }
+    //================================= GET LOCATION TAG ===============================================
+    @Override
+    public List Location_Tag_List(String Location_name) {
+        String sql = "SELECT location.location_id, location.name from location_tag_map,location, location_tag where location.location_id=location_tag_map.location_id and location_tag.location_tag_id=location_tag_map.location_tag_id and location_tag.name='Visit Location' and location.name='"+Location_name+"'";
+        org.hibernate.Query query = this.getSession().createSQLQuery(sql)
+                .setResultTransformer(Transformers.aliasToBean(LocationTag_List.class));
 
+        logger.info("Location_Tag sql: " + sql);
+
+        List results = query.list();
+
+        if (results.size() > 0) {
+            return results;
+
+        } else {
+
+            logger.info("no Location Tag");
+            return null;
+        }
+
+
+    }
 
 }

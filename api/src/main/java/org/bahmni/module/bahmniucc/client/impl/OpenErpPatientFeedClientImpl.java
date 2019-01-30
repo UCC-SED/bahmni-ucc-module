@@ -778,4 +778,8 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
     @Override
     public List userID_List(String fullname) { return debtorRowDAO.userID_List(fullname);
     }
+
+    @Override
+    public List Location_Tag_List(String Location_name) { return debtorRowDAO.Location_Tag_List(Location_name);
+    }
 }
