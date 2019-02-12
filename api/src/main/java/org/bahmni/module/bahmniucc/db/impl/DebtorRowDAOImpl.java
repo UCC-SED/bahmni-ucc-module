@@ -212,34 +212,35 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
     }
 
     @Override
-    public String getDrug_request(String drug_name)
+    public List getDrug_request(String drug_name)
     {
         String bysearch= null;
         if(drug_name !="") {
-            bysearch = "where drug" +
-                    ".name like  '%"+drug_name+"%' ";
+            bysearch = "where drug.name like'%"+drug_name+"%'";
         }
         else
             bysearch="";
 
-        String sql = "select person_id_sub_store,item_id,date_qty_requested,quantity_requested," +
-                "sub_store_id,product_mvnt_status,price_list_id from wh_product_movement,person_name,drug  "+bysearch+" order by date_qty_requested desc limit 50";
+        String sql = "select person_id_sub_store,item_id,date_qty_requested,quantity_requested,sub_store_id,product_mvnt_status,price_list_id from wh_product_movement " +
+                "inner join person_name on person_name.person_id=wh_product_movement.person_id_sub_store " +
+                "inner join drug on drug.concept_id=wh_product_movement.item_id "+bysearch+" order by date_qty_requested desc limit 50";
         org.hibernate.Query query = this.getSession().createSQLQuery(sql)
-                .setResultTransformer(Transformers.aliasToBean(getPaid_canceledOrders.class));
-
+                .setResultTransformer(Transformers.aliasToBean(getDrug_request_List.class));
+        logger.info("data"+sql);
         List results = query.list();
 
         if (results.size() > 0) {
 
-            return null;
+            return results;
 
         } else {
 
-            logger.info("no data");
+            logger.info("no data"+sql);
             return null;
         }
-
     }
+
+
 
     @Override
     public String createdrug_requestOrder(int item_id,int qty_req,int price_listId,int userId, int sub_store_id){
@@ -2190,7 +2191,7 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
 
     @Override
     public List getLocation_List() {
-        String sql = "SELECT * FROM wh_person_location_map ORDER BY date_recorded DESC LIMIT 100";
+        String sql = "SELECT person_name.person_id as id, CONCAT(person_name.given_name,' ',ifnull(person_name.middle_name,' '),' ',ifnull(person_name.family_name,' '))as fullname, location.location_id, location.name as location FROM wh_person_location_map,person_name,location WHERE wh_person_location_map.person_id=person_name.person_id AND wh_person_location_map.location_id=location.location_id";
         org.hibernate.Query query = this.getSession().createSQLQuery(sql)
         .setResultTransformer(Transformers.aliasToBean(LocationList.class));
 
@@ -2267,7 +2268,7 @@ public class DebtorRowDAOImpl implements DebtorRowDAO {
     //================================= GET LOCATION TAG ===============================================
     @Override
     public List Location_Tag_List(String Location_name) {
-        String sql = "SELECT location.location_id, location.name from location_tag_map,location, location_tag where location.location_id=location_tag_map.location_id and location_tag.location_tag_id=location_tag_map.location_tag_id and location_tag.name='Visit Location' and location.name='"+Location_name+"'";
+        String sql = "SELECT location.location_id, location.name from location_tag_map,location, location_tag where location.location_id=location_tag_map.location_id and location_tag.location_tag_id=location_tag_map.location_tag_id and location_tag.name='Visit Location' and location.name LIKE '%"+Location_name+"%'";
         org.hibernate.Query query = this.getSession().createSQLQuery(sql)
                 .setResultTransformer(Transformers.aliasToBean(LocationTag_List.class));
 

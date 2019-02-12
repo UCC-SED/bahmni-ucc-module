@@ -66,4 +66,6 @@ public interface OpenErpPatientFeedClient extends DebtClient{
     //location Tag
     List Location_Tag_List(String Location_name);
 
+    List getDrug_request(String drug_name);
+
 }

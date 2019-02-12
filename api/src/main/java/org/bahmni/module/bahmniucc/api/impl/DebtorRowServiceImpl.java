@@ -289,4 +289,10 @@ public class DebtorRowServiceImpl  extends BaseOpenmrsService implements DebtorR
     public List Location_Tag_List(String Location_name) {
         return debtorRowDAO.Location_Tag_List(Location_name);
     }
+
+    // get location tag list
+    @Override
+    public List getDrug_request(String drug_name) {
+        return debtorRowDAO.getDrug_request(drug_name);
+    }
 }

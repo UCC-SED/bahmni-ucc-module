@@ -38,7 +38,7 @@ public interface DebtClient {
 
     List get_dbData(String qry);
 
-    String getDrug_request(String drug_name);
+    List getDrug_request(String drug_name);
 
     String updateRoom(String room, String patientUuid);
 

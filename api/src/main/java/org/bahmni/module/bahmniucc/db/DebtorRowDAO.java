@@ -44,7 +44,7 @@ public interface DebtorRowDAO {
 
     int get_sub_store_id(int userId);
 
-    String getDrug_request(String drug_name);
+   List getDrug_request(String drug_name);
 
     String createdrug_requestOrder(int item_id,int qty_req,int price_listId,int userId,int sub_store_id);
 

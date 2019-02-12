@@ -75,7 +75,7 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
     }
 
     @Override
-    public String getDrug_request(String drug_name){
+    public List getDrug_request(String drug_name){
         return debtorRowDAO.getDrug_request( drug_name);
     }
 
@@ -782,4 +782,8 @@ public class OpenErpPatientFeedClientImpl implements OpenErpPatientFeedClient {
     @Override
     public List Location_Tag_List(String Location_name) { return debtorRowDAO.Location_Tag_List(Location_name);
     }
+
+
+
+
 }
